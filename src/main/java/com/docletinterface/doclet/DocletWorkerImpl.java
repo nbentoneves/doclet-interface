@@ -3,10 +3,15 @@ package com.docletinterface.doclet;
 import com.docletinterface.domain.DocMethod;
 import com.docletinterface.util.DocletUtils;
 import com.sun.javadoc.MethodDoc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
+import java.util.regex.PatternSyntaxException;
 
 public class DocletWorkerImpl implements DocletWorker {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(DocletWorkerImpl.class);
 
     private static final String DELIMITATOR_COLON = ":";
     private static final String DELIMITATOR_DASH = "-";
@@ -41,26 +46,49 @@ public class DocletWorkerImpl implements DocletWorker {
 
             String line = docLine.trim();
 
-            switch (getTag(line)) {
-                case METHOD_NAME:
-                    String methodName = line.split(DELIMITATOR_COLON)[1].trim();
-                    docMethod.withMethodName(methodName);
-                    break;
-                case METHOD_DESCRIPTION:
-                    String methodDescrip = line.split(DELIMITATOR_COLON)[1].trim();
-                    docMethod.withMethodDescription(methodDescrip);
-                    break;
-                case RETURN:
-                    String returnType = line.split(DELIMITATOR_COLON)[1].split(DELIMITATOR_DASH)[0].trim();
-                    docMethod.withReturnObject(returnType);
-                    break;
-                case PARAM:
-                    String paramType = line.split(DELIMITATOR_COLON)[1].split(DELIMITATOR_DASH)[0].trim();
-                    int paramIndex = Integer.valueOf(line.split(DELIMITATOR_COLON)[0].split(DELIMITATOR_DASH)[1]);
-                    docMethod.addParamObjects(paramIndex, paramType);
-                    break;
-                default:
-                    break;
+            try {
+                switch (getTag(line)) {
+                    case METHOD_NAME:
+                        String methodName = line.split(DELIMITATOR_COLON)[1].trim();
+                        docMethod.withMethodName(methodName);
+                        break;
+                    case METHOD_DESCRIPTION:
+                        String methodDescrip = line.split(DELIMITATOR_COLON)[1].trim();
+                        docMethod.withMethodDescription(methodDescrip);
+                        break;
+                    case RETURN:
+                        String returnDocumentation = line.split(DELIMITATOR_COLON)[1].trim();
+
+                        try {
+                            String returnDescription = returnDocumentation.split(DELIMITATOR_DASH)[1].trim();
+                            String returnType = returnDocumentation.split(DELIMITATOR_DASH)[0].trim();
+                            docMethod.withReturnObject(returnType);
+                        } catch (PatternSyntaxException ex) {
+                            LOGGER.warn("msg='Can not extract the value detail, check the format of documentation', return={}", returnDocumentation, ex);
+                            docMethod.withReturnObject(returnDocumentation);
+                        }
+
+                        break;
+                    case PARAM:
+                        String paramDocumentation = line.split(DELIMITATOR_COLON)[1].trim();
+                        int paramIndex = Integer.valueOf(line.split(DELIMITATOR_COLON)[0].split(DELIMITATOR_DASH)[1]);
+
+                        try {
+                            String paramDescription = paramDocumentation.split(DELIMITATOR_DASH)[1].trim();
+                            String paramType = paramDocumentation.split(DELIMITATOR_DASH)[0].trim();
+                            docMethod.addParamObjects(paramIndex, paramType);
+                        } catch (PatternSyntaxException ex) {
+                            LOGGER.warn("msg='Can not extract the param detail, check the format of documentation', param={}", paramDocumentation, ex);
+                            docMethod.addParamObjects(paramIndex, paramDocumentation);
+                        }
+
+                        break;
+                    default:
+                        break;
+                }
+            } catch (Exception ex) {
+                LOGGER.error("msg='Can not extract the value, check the format of documentation', docLine={}", docLine, ex);
+                throw new DocumentInvalidFormat("Error when try to extract the values form line: ", ex);
             }
 
         }

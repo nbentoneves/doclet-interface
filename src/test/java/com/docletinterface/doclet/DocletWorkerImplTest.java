@@ -2,9 +2,12 @@ package com.docletinterface.doclet;
 
 import com.docletinterface.domain.DocMethod;
 import com.sun.javadoc.MethodDoc;
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
 
 import java.util.Optional;
@@ -14,6 +17,7 @@ import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@RunWith(JUnitParamsRunner.class)
 public class DocletWorkerImplTest {
 
     private DocletWorker victim;
@@ -108,5 +112,50 @@ public class DocletWorkerImplTest {
         assertEquals("Int", docMethod.get().getParamObjects().get(1));
         assertEquals("XptoObject", docMethod.get().getParamObjects().get(2));
 
+    }
+
+    @Parameters(method = "dataInvalidDocumentation")
+    @Test(expected = DocumentInvalidFormat.class)
+    public void testExtractInvalidDocumentation(String methodName, String methodDescription, String returnInfo, String param1, String param2) {
+
+        String documentation = "@doclib\n" +
+                methodName + "\n" +
+                methodDescription + "\n" +
+                returnInfo + "\n" +
+                param1 + "\n" +
+                param2 + "\n" +
+                "@enddoclib";
+
+        when(methodDoc.getRawCommentText()).thenReturn(documentation);
+        Optional<DocMethod> docMethod = victim.processInterfaceMethod(methodDoc);
+
+        assertTrue(docMethod.isPresent());
+        assertNull(docMethod.get().getClassName());
+        assertEquals("startMethod", docMethod.get().getMethodName());
+        assertEquals("Description", docMethod.get().getMethodDescription());
+        assertEquals("String", docMethod.get().getReturnObject());
+        assertEquals("Int", docMethod.get().getParamObjects().get(1));
+        assertEquals("XptoObject", docMethod.get().getParamObjects().get(2));
+
+    }
+
+    @SuppressWarnings("unused")
+    private static Object[][] dataInvalidDocumentation() {
+        return new Object[][]{
+                //Invalid methodName format (- instead of :) E.g (methodName - startMethod)
+                {"methodName - startMethod", "methodDescription: Description", "return: String - Description", "param-1: Int - Description", "param-2: XptoObject - Description"},
+                //Invalid methodDescription format (- instead of :) E.g (methodDescription - Description)
+                {"methodName: startMethod", "methodDescription - Description", "return: String - Description", "param-1: Int - Description", "param-2: XptoObject - Description"},
+                //Invalid return format (- instead of :) E.g (return - String - Description)
+                {"methodName: startMethod", "methodDescription: Description", "return - String - Description", "param-1: Int - Description", "param-2: XptoObject - Description"},
+                //Invalid return description format (: instead of -) E.g (return: String : Description)
+                {"methodName: startMethod", "methodDescription: Description", "return: String : Description", "param-1: Int - Description", "param-2: XptoObject - Description"},
+                //Invalid param1 format (_ instead of -) E.g (param_1: Int - Description)
+                {"methodName: startMethod", "methodDescription: Description", "return: String - Description", "param_1: Int - Description", "param-2: XptoObject - Description"},
+                //Invalid param1 format (- instead of :) E.g (param-1- Int - Description)
+                {"methodName: startMethod", "methodDescription: Description", "return: String - Description", "param-1- Int - Description", "param-2: XptoObject - Description"},
+                //Invalid param1 description format (_ instead of -)  E.g (param-1: Int _ Description)
+                {"methodName: startMethod", "methodDescription: Description", "return: String - Description", "param-1: Int _ Description", "param-2: XptoObject - Description"},
+        };
     }
 }

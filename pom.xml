@@ -15,7 +15,7 @@
     <name>doclet-interface-helper</name>
     <description>Generate a more readeable documentation for Java interface libraries</description>
 
-    <!-- Helping websites -->
+    <!-- FIXME: Helping websites -->
     <!-- http://devtools.mikaelsvensson.info/doclet/custom-document-creator.html -->
     <!-- https://github.com/gboersma/uml-java-doclet -->
 
@@ -33,6 +33,7 @@
 
         <ognl.version>3.1.12</ognl.version>
         <sun.tools.version>1.5.0</sun.tools.version>
+        <junitparam.version>1.1.1</junitparam.version>
     </properties>
 
     <dependencyManagement>
@@ -41,6 +42,11 @@
                 <groupId>ognl</groupId>
                 <artifactId>ognl</artifactId>
                 <version>${ognl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>pl.pragmatists</groupId>
+                <artifactId>JUnitParams</artifactId>
+                <version>${junitparam.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -58,6 +64,7 @@
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
         </dependency>
+        <!-- FIXME: Review this dependency -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
@@ -96,14 +103,22 @@
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>pl.pragmatists</groupId>
+            <artifactId>JUnitParams</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <!-- Add plugin manager -->
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -212,6 +227,8 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
+                            <!-- FIXME: Please change to true value -->
+                            <haltOnFailure>false</haltOnFailure>
                             <rules>
                                 <rule>
                                     <element>CLASS</element>
