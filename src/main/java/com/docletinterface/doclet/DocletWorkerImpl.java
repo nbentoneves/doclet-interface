@@ -9,6 +9,21 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
 
+/**
+ * <pre>
+ *
+ * @doclib
+ *  methodName: startMethod
+ *  methodDescription: Description
+ *  return: String - Description
+ *  param-1: Int - Description
+ *  param-2: XptoObject - Description
+ *  ...
+ *
+ * @enddoclib
+ *
+ * </pre>
+ */
 public class DocletWorkerImpl implements DocletWorker {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(DocletWorkerImpl.class);
@@ -88,7 +103,7 @@ public class DocletWorkerImpl implements DocletWorker {
                 }
             } catch (Exception ex) {
                 LOGGER.error("msg='Can not extract the value, check the format of documentation', docLine={}", docLine, ex);
-                throw new DocumentInvalidFormat("Error when try to extract the values form line: ", ex);
+                throw new DocumentInvalidFormatException("Error when try to extract the values form line: ", ex);
             }
 
         }

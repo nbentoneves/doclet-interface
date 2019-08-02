@@ -15,12 +15,7 @@
     <name>doclet-interface-helper</name>
     <description>Generate a more readeable documentation for Java interface libraries</description>
 
-    <!-- FIXME: Helping websites -->
-    <!-- http://devtools.mikaelsvensson.info/doclet/custom-document-creator.html -->
-    <!-- https://github.com/gboersma/uml-java-doclet -->
-
     <properties>
-        <jacoco.version>0.7.4.201502262128</jacoco.version>
         <jacoco.classRatio>0.80</jacoco.classRatio>
         <jacoco.instructionRatio>0.80</jacoco.instructionRatio>
         <jacoco.methodRatio>0.80</jacoco.methodRatio>
@@ -34,6 +29,7 @@
         <ognl.version>3.1.12</ognl.version>
         <sun.tools.version>1.5.0</sun.tools.version>
         <junitparam.version>1.1.1</junitparam.version>
+        <jacoco.version>0.7.4.201502262128</jacoco.version>
     </properties>
 
     <dependencyManagement>

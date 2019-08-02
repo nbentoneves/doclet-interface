@@ -13,6 +13,10 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
+<!-- FIXME: Helping websites -->
+    <!-- http://devtools.mikaelsvensson.info/doclet/custom-document-creator.html -->
+    <!-- https://github.com/gboersma/uml-java-doclet -->
+
 ### Notes
 
         try {

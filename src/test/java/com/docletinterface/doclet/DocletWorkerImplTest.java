@@ -115,7 +115,7 @@ public class DocletWorkerImplTest {
     }
 
     @Parameters(method = "dataInvalidDocumentation")
-    @Test(expected = DocumentInvalidFormat.class)
+    @Test(expected = DocumentInvalidFormatException.class)
     public void testExtractInvalidDocumentation(String methodName, String methodDescription, String returnInfo, String param1, String param2) {
 
         String documentation = "@doclib\n" +

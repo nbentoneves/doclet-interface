@@ -6,20 +6,7 @@ import com.sun.javadoc.RootDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * <pre>
- *
- * @doclib
- *  methodName: start
- *  methodDescription: Description
- *  return: String - Description
- *  param-1: Int - Description
- *  ...
- *
- * @enddoclib
- *
- * </pre>
- */
+
 public class GenDocletInterface extends Doclet {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GenDocletInterface.class);
@@ -29,9 +16,8 @@ public class GenDocletInterface extends Doclet {
     public static boolean start(RootDoc root) {
 
         DocletWorker worker = new DocletWorkerImpl();
-        //FIXME: Change for custome exception
-        docMethod = worker.processInterfaceMethod(root.specifiedClasses()[0].methods()[0]).orElseThrow(() -> new RuntimeException(""));
-
+        docMethod = worker.processInterfaceMethod(root.specifiedClasses()[0].methods()[0]).orElseThrow(
+                () -> new RuntimeException("Can not find any documentation generated!"));
         LOGGER.info("{}", docMethod);
 
         return true;

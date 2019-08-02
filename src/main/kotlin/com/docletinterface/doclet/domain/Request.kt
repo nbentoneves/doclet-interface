@@ -1,3 +1,8 @@
 package com.docletinterface.doclet.domain
 
-data class Request(var json: String?)
+open class Request{
+
+    var json: String? = null
+    var counter: Int? = null
+
+}
