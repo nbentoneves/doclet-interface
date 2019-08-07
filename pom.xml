@@ -6,14 +6,16 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.1.6.RELEASE</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
 
     <groupId>com.doclet-interface.helper</groupId>
     <artifactId>doclet-interface-helper</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+
     <name>doclet-interface-helper</name>
-    <description>Generate a more readeable documentation for Java interface libraries</description>
+
+    <description>Library to generate a html page to allow testing and document APIs</description>
 
     <properties>
         <jacoco.classRatio>0.80</jacoco.classRatio>
@@ -28,8 +30,10 @@
 
         <ognl.version>3.1.12</ognl.version>
         <sun.tools.version>1.5.0</sun.tools.version>
+
+        <!-- Testing dependencies -->
         <junitparam.version>1.1.1</junitparam.version>
-        <jacoco.version>0.7.4.201502262128</jacoco.version>
+        <jacoco.version>0.8.4</jacoco.version>
     </properties>
 
     <dependencyManagement>
@@ -50,7 +54,7 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -74,19 +78,12 @@
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
 
-        <!-- FIXME: Please remove -->
-        <dependency>
-            <groupId>com.ppb.platform</groupId>
-            <artifactId>tests</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
         <!-- FIXME: Why can do this work -->
         <dependency>
             <groupId>com.sun</groupId>
             <artifactId>tools</artifactId>
             <scope>system</scope>
-            <version>1.8</version>
+            <version>${java.version}</version>
             <systemPath>${java.home}/../lib/tools.jar</systemPath>
         </dependency>
 
@@ -116,11 +113,6 @@
     <build>
         <!-- Add plugin manager -->
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -205,20 +197,21 @@
                 <version>${jacoco.version}</version>
                 <executions>
                     <execution>
-                        <id>default-prepare-agent</id>
+                        <id>jacoco-initialize</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-report</id>
+                        <id>jacoco-report</id>
                         <phase>prepare-package</phase>
                         <goals>
                             <goal>report</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>default-check</id>
+                        <id>jacoco-check</id>
+                        <phase>test</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>

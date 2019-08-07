@@ -1,6 +1,6 @@
-package com.docletinterface.doclet.controller
+package com.docletinterface.ui.controller
 
-import com.docletinterface.doclet.domain.Request
+import com.docletinterface.ui.domain.Request
 import com.docletinterface.domain.DocMethod
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller

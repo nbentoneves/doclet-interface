@@ -1,3 +1,3 @@
-package com.docletinterface.doclet.exceptions
+package com.docletinterface.ui
 
 class DocletInterfaceException(message: String) : Exception(message)

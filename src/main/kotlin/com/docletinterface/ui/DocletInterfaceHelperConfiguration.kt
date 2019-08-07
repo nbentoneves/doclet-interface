@@ -1,6 +1,6 @@
-package com.docletinterface.doclet
+package com.docletinterface.ui
 
-import com.docletinterface.doclet.exceptions.DocletInterfaceException
+import com.docletinterface.doclet.GenDocletInterface
 import com.docletinterface.domain.DocMethod
 import com.sun.tools.javadoc.Main
 import org.springframework.beans.factory.annotation.Value
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 open class DocletInterfaceHelperConfiguration {
 
-    @Value("#{systemProperties.sourceInterface}")
+    @Value("\${doclet.sourceInterface}")
     lateinit var property: String
 
     @Bean(name = ["docMethod"])
