@@ -5,8 +5,10 @@ import com.docletinterface.domain.ParameterType
 import com.docletinterface.ui.logic.exception.DeserializationException
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.slf4j.LoggerFactory
+import java.lang.reflect.Method
 import javax.naming.OperationNotSupportedException
 import kotlin.reflect.KClass
 
@@ -32,7 +34,7 @@ class InvokeMethod {
 
             LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
 
-            val result = serialization(method.invoke(classInstance, *listOfParametersValues))
+            val result = serialization(classInstance, method, listOfParametersValues)
 
             LOGGER.info("Result serialized... result={}", result)
 
@@ -83,6 +85,8 @@ class InvokeMethod {
                         }
                     }
                 }
+            } catch (ex: MismatchedInputException) {
+                throw DeserializationException("Can't deserialize one of parameters, please check the parameters type!", ex)
             } catch (ex: NoSuchMethodException) {
                 throw DeserializationException("Can't find the operation, please check the documentation!", ex)
             } catch (ex: IllegalArgumentException) {
@@ -92,7 +96,13 @@ class InvokeMethod {
             return parameterList
         }
 
-        private fun serialization(data: Any): String = run { MAPPING.writeValueAsString(data) }
+        private fun serialization(classInstance: Any, method: Method, listOfParametersValues: Array<Any>): String = run {
+            return try {
+                MAPPING.writerWithDefaultPrettyPrinter().writeValueAsString(method.invoke(classInstance, *listOfParametersValues))
+            } catch (ex: Exception) {
+                MAPPING.writerWithDefaultPrettyPrinter().writeValueAsString(ex)
+            }
+        }
 
     }
 

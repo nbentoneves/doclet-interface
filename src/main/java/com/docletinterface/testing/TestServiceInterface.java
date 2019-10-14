@@ -9,7 +9,7 @@ public interface TestServiceInterface {
      * @doclib
      *
      * className: TestServiceClass
-     * packageName: com.docletinterface
+     * packageName: com.docletinterface.testing
      * methodName: calculator
      * methodDescription: It's a service to calculate two numbers
      * return: Int - the result of calculation

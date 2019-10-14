@@ -1,0 +1,17 @@
+matrix:
+  include:
+    - language: java
+      sudo: false
+      jdk: openjdk8
+      cache:
+        directories:
+          - "~/.m2/repository"
+      branches:
+        only:
+          - master
+      install:
+        - mvn -f pom.xml install -B -V
+
+notifications:
+  email:
+    - nbento.neves@gmail.com

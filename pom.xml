@@ -10,10 +10,10 @@
     </parent>
 
     <groupId>com.doclet-interface.helper</groupId>
-    <artifactId>doclet-interface-helper</artifactId>
+    <artifactId>sesame-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
-    <name>doclet-interface-helper</name>
+    <name>sesame-java</name>
 
     <description>Library to generate a html page to allow testing and document APIs</description>
 

@@ -1,4 +1,4 @@
-package com.docletinterface.ui.logic
+package com.docletinterface.ui.logic.exception
 
 import com.docletinterface.ui.DocletInterfaceException
 
