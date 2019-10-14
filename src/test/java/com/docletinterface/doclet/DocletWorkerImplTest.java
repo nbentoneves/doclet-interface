@@ -1,6 +1,8 @@
 package com.docletinterface.doclet;
 
+import com.docletinterface.doclet.exception.DocumentInvalidFormatException;
 import com.docletinterface.domain.DocMethod;
+import com.docletinterface.domain.ParameterType;
 import com.sun.javadoc.MethodDoc;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -94,23 +96,27 @@ public class DocletWorkerImplTest {
     public void testExtractValidDocumentation() {
 
         String documentation = "@doclib\n" +
+                "className: className\n" +
+                "packageName: packageName\n" +
                 "methodName: startMethod\n" +
                 "methodDescription: Description\n" +
                 "return: String - Description\n" +
                 "param-1: Int - Description\n" +
-                "param-2: XptoObject - Description\n" +
+                "param-2: XptoSample - Description\n" +
                 "@enddoclib";
 
         when(methodDoc.getRawCommentText()).thenReturn(documentation);
         Optional<DocMethod> docMethod = victim.processInterfaceMethod(methodDoc);
 
         assertTrue(docMethod.isPresent());
-        assertNull(docMethod.get().getClassName());
+        assertEquals("className", docMethod.get().getClassName());
+        assertEquals("packageName", docMethod.get().getPackageName());
         assertEquals("startMethod", docMethod.get().getMethodName());
         assertEquals("Description", docMethod.get().getMethodDescription());
         assertEquals("String", docMethod.get().getReturnObject());
-        assertEquals("Int", docMethod.get().getParamObjects().get(1));
-        assertEquals("XptoObject", docMethod.get().getParamObjects().get(2));
+
+        assertEquals(ParameterType.INT, docMethod.get().getParamObjects().get(1));
+        assertEquals(ParameterType.OBJECT, docMethod.get().getParamObjects().get(2));
 
     }
 
@@ -130,12 +136,11 @@ public class DocletWorkerImplTest {
         Optional<DocMethod> docMethod = victim.processInterfaceMethod(methodDoc);
 
         assertTrue(docMethod.isPresent());
-        assertNull(docMethod.get().getClassName());
         assertEquals("startMethod", docMethod.get().getMethodName());
         assertEquals("Description", docMethod.get().getMethodDescription());
         assertEquals("String", docMethod.get().getReturnObject());
-        assertEquals("Int", docMethod.get().getParamObjects().get(1));
-        assertEquals("XptoObject", docMethod.get().getParamObjects().get(2));
+        assertEquals(ParameterType.INT, docMethod.get().getParamObjects().get(1));
+        assertEquals(ParameterType.OBJECT, docMethod.get().getParamObjects().get(2));
 
     }
 

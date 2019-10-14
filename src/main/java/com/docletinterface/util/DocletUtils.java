@@ -7,6 +7,9 @@ public class DocletUtils {
     private static final String START_TAG_DOCLIB = "@doclib";
     private static final String END_TAG_DOCLIB = "@enddoclib";
 
+    private DocletUtils() {
+    }
+
     public static Optional<String> extractDoclibTags(String fullMethodComment) {
 
         if (fullMethodComment == null || fullMethodComment.isEmpty()) {

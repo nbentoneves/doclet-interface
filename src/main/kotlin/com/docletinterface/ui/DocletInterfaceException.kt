@@ -1,3 +1,8 @@
 package com.docletinterface.ui
 
-class DocletInterfaceException(message: String) : Exception(message)
+open class DocletInterfaceException : RuntimeException {
+
+    constructor(message: String, ex: Exception?) : super(message, ex)
+    constructor(message: String) : super(message)
+
+}

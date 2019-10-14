@@ -64,7 +64,11 @@
                             <table class="table table-bordered">
                                 <tbody>
                                 <tr>
-                                    <th scope="row">Method Name:</th>
+                                    <th scope="row">Package:</th>
+                                    <td colspan="3" th:text="${packageName}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Method:</th>
                                     <td colspan="3" th:text="${methodName}"></td>
                                 </tr>
                                 <tr>
@@ -79,7 +83,7 @@
                                 </tr>
                                 <tr th:each="instance : ${paramObjects}">
                                     <th scope="row" th:text="${instance.key}"></th>
-                                    <td th:text="${instance.value}"></td>
+                                    <td th:text="${instance.value.getDisplayType()}"></td>
                                     <!-- FIXME: Need to add a description value -->
                                     <td></td>
                                 </tr>
@@ -93,32 +97,44 @@
                             <h4 class="mb-0">Testing</h4>
                         </div>
                         <div class="card-body">
-                            <form action="#" th:action="@{/submit}" th:object="${value}" th:method="post">
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Request Json:</label>
-                                    <div class="alert alert-info" role="alert">
-                                        <p>You should insert the parameters using json, please insert a parameter per
-                                            json value</p>
-                                        <p>E.g:</p>
-                                        <code>
-                                            //First parameter
-                                            {
-                                            "home" : "MyHome"
-                                            },
-                                            //Second parameter
-                                            {
-                                            "age" : "20"
-                                            }
-                                        </code>
-                                    </div>
-                                    <textarea th:field="*{json}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Request Json:</label>
+                                <div class="alert alert-info" role="alert">
+                                    <p>You should insert the parameters using json, please insert a parameter per
+                                        json value</p>
+                                    <p>E.g:</p>
+                                    <code>
+                                        //First parameter
+                                        {
+                                        "home" : "MyHome"
+                                        },
+                                        //Second parameter
+                                        {
+                                        "age" : "20"
+                                        }
+                                    </code>
+                                </div>
+                                <form action="#" th:action="@{/submit}" th:object="${value}" th:method="post">
+                                    <textarea th:field="*{json}" class="form-control" id="exampleFormControlTextarea1"
+                                              rows="3"></textarea>
                                     <br/>
                                     <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Request
                                     </button>
                                     <br/>
-                                    <div class="alert alert-danger" role="alert">Eiiiiii, don't do this...WTF?!</div>
-                                </div>
-                            </form>
+                                </form>
+                                <div class="alert alert-danger" role="alert"><span th:text="*{errorMsg}"></span></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h4 class="mb-0">Result</h4>
+                        </div>
+                        <div class="card-body">
+                            <textarea th:text="*{result}" class="form-control" id="resultTextArea" rows="3" contenteditable="false"></textarea>
+                            <br/>
                         </div>
                     </div>
                 </div>
