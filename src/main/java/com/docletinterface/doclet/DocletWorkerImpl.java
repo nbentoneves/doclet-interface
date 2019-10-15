@@ -1,6 +1,8 @@
 package com.docletinterface.doclet;
 
+import com.docletinterface.doclet.exception.DocumentInvalidFormatException;
 import com.docletinterface.domain.DocMethod;
+import com.docletinterface.domain.ParameterType;
 import com.docletinterface.util.DocletUtils;
 import com.sun.javadoc.MethodDoc;
 import org.slf4j.Logger;
@@ -31,13 +33,15 @@ public class DocletWorkerImpl implements DocletWorker {
     private static final String DELIMITATOR_COLON = ":";
     private static final String DELIMITATOR_DASH = "-";
 
+    private static final String FIELD_PACKAGENAME = "packageName";
+    private static final String FIELD_CLASSNAME = "className";
     private static final String FIELD_METHODNAME = "methodName";
     private static final String FIELD_METHODDESCRIPTION = "methodDescription";
     private static final String FIELD_RETURN = "return";
     private static final String FIELD_PARAM = "param";
 
     private enum Tag {
-        METHOD_NAME, METHOD_DESCRIPTION, RETURN, PARAM, OTHER;
+        PACKAGE_NAME, CLASS_NAME, METHOD_NAME, METHOD_DESCRIPTION, RETURN, PARAM, OTHER;
     }
 
     @Override
@@ -63,6 +67,14 @@ public class DocletWorkerImpl implements DocletWorker {
 
             try {
                 switch (getTag(line)) {
+                    case PACKAGE_NAME:
+                        String packageName = line.split(DELIMITATOR_COLON)[1].trim();
+                        docMethod.withPackageName(packageName);
+                        break;
+                    case CLASS_NAME:
+                        String className = line.split(DELIMITATOR_COLON)[1].trim();
+                        docMethod.withClassName(className);
+                        break;
                     case METHOD_NAME:
                         String methodName = line.split(DELIMITATOR_COLON)[1].trim();
                         docMethod.withMethodName(methodName);
@@ -78,6 +90,7 @@ public class DocletWorkerImpl implements DocletWorker {
                             String returnDescription = returnDocumentation.split(DELIMITATOR_DASH)[1].trim();
                             String returnType = returnDocumentation.split(DELIMITATOR_DASH)[0].trim();
                             docMethod.withReturnObject(returnType);
+                            docMethod.withReturnObjectDescription(returnDescription);
                         } catch (PatternSyntaxException ex) {
                             LOGGER.warn("msg='Can not extract the value detail, check the format of documentation', return={}", returnDocumentation, ex);
                             docMethod.withReturnObject(returnDocumentation);
@@ -91,10 +104,9 @@ public class DocletWorkerImpl implements DocletWorker {
                         try {
                             String paramDescription = paramDocumentation.split(DELIMITATOR_DASH)[1].trim();
                             String paramType = paramDocumentation.split(DELIMITATOR_DASH)[0].trim();
-                            docMethod.addParamObjects(paramIndex, paramType);
+                            docMethod.addParamObjects(paramIndex, ParameterType.getInternalType(paramType));
                         } catch (PatternSyntaxException ex) {
                             LOGGER.warn("msg='Can not extract the param detail, check the format of documentation', param={}", paramDocumentation, ex);
-                            docMethod.addParamObjects(paramIndex, paramDocumentation);
                         }
 
                         break;
@@ -121,6 +133,10 @@ public class DocletWorkerImpl implements DocletWorker {
             return Tag.RETURN;
         } else if (line.startsWith(FIELD_PARAM)) {
             return Tag.PARAM;
+        } else if (line.startsWith(FIELD_CLASSNAME)) {
+            return Tag.CLASS_NAME;
+        } else if (line.startsWith(FIELD_PACKAGENAME)) {
+            return Tag.PACKAGE_NAME;
         }
 
         return Tag.OTHER;

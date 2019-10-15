@@ -16,6 +16,12 @@ public class GenDocletInterface extends Doclet {
     public static boolean start(RootDoc root) {
 
         DocletWorker worker = new DocletWorkerImpl();
+
+        if (root == null || root.specifiedClasses() == null || root.specifiedClasses().length == 0) {
+            LOGGER.error("Can't process any source. Please check the property inserted!");
+            return false;
+        }
+
         docMethod = worker.processInterfaceMethod(root.specifiedClasses()[0].methods()[0]).orElseThrow(
                 () -> new RuntimeException("Can not find any documentation generated!"));
         LOGGER.info("{}", docMethod);

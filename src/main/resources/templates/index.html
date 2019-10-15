@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="Nuno Bento <nbento.neves@gmail.com>">
 
-    <title>Scrolling Nav - Start Bootstrap Template</title>
+    <title>Sesame Java - Make magic with sesames</title>
 
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -18,34 +18,9 @@
 
 <body id="page-top">
 
-<!-- Navigation -->
-<!--
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-  <div class="container">
-    <a class="navbar-brand js-scroll-trigger" href="#page-top">Start Bootstrap</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarResponsive">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#services">Services</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
--->
-
 <header class="bg-primary text-white">
     <div class="container text-center">
-        <h1>Interface to testing <span th:text="${className}"></span></h1>
+        <h1>Interface for <span th:text="${className}"></span></h1>
         <p class="lead">Now you can test your interface only with one dependency 😎</p>
     </div>
 </header>
@@ -53,38 +28,49 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 mx-auto">
-                <h2>Make magic happens 🎩</h2>
+                <h2>Make magic 🎩</h2>
                 <br/>
                 <div class="accordion" id="accordionExample">
                     <div class="card">
                         <div class="card-header">
-                            <h4 class="mb-0">Library Info</h4>
+                            <h4 class="mb-0">Library Info <span class="btn btn-link" type="button"
+                                                                data-toggle="collapse"
+                                                                data-target="#collapseInfo" aria-expanded="true"
+                                                                aria-controls="collapseOne">⬆️</span></h4>
                         </div>
-                        <div class="card-body">
-                            <table class="table table-bordered">
-                                <tbody>
-                                <tr>
-                                    <th scope="row">Method Name:</th>
-                                    <td colspan="3" th:text="${methodName}"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Method Description:</th>
-                                    <td colspan="3" th:text="${methodDescription}"></td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Return:</th>
-                                    <td th:text="${returnObject}"></td>
-                                    <!-- FIXME: Need to add a description to return values -->
-                                    <td></td>
-                                </tr>
-                                <tr th:each="instance : ${paramObjects}">
-                                    <th scope="row" th:text="${instance.key}"></th>
-                                    <td th:text="${instance.value}"></td>
-                                    <!-- FIXME: Need to add a description value -->
-                                    <td></td>
-                                </tr>
-                                </tbody>
-                            </table>
+
+                        <div id="collapseInfo" class="collapse show" aria-labelledby="headingOne"
+                             data-parent="#accordionExample">
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <th scope="row">Package:</th>
+                                        <td colspan="2" th:text="${packageName}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Method:</th>
+                                        <td colspan="2" th:text="${methodName}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Method Description:</th>
+                                        <td colspan="2" th:text="${methodDescription}"></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Return:</th>
+                                        <td colspan="2" th:text="${returnObject}"></td>
+                                        <!-- FIXME: Need to add a description to return values -->
+                                        <!--<td></td>-->
+                                    </tr>
+                                    <tr th:each="instance : ${paramObjects}">
+                                        <th scope="row" th:text="${instance.key}"></th>
+                                        <td colspan="2" th:text="${instance.value.getDisplayType()}"></td>
+                                        <!-- FIXME: Need to add a description value -->
+                                        <!--<td></td>-->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -93,32 +79,49 @@
                             <h4 class="mb-0">Testing</h4>
                         </div>
                         <div class="card-body">
-                            <form action="#" th:action="@{/submit}" th:object="${value}" th:method="post">
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Request Json:</label>
-                                    <div class="alert alert-info" role="alert">
-                                        <p>You should insert the parameters using json, please insert a parameter per
-                                            json value</p>
-                                        <p>E.g:</p>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Request Json:</label>
+                                <div class="alert alert-info" role="alert">
+                                    <p>You should insert the parameters using json, please insert a parameter per
+                                        json value</p>
+                                    <p>E.g:</p>
+                                    <pre class="pre-scrollable">
                                         <code>
-                                            //First parameter
-                                            {
-                                            "home" : "MyHome"
-                                            },
-                                            //Second parameter
-                                            {
-                                            "age" : "20"
-                                            }
+    [
+        {
+            "isPrimitive": true,
+            "value": "2"
+        },
+        {
+            "isPrimitive": true,
+            "value": "3"
+        }
+    ]
                                         </code>
-                                    </div>
-                                    <textarea th:field="*{json}" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                    </pre>
+                                </div>
+                                <form action="#" th:action="@{/submit}" th:object="${value}" th:method="post">
+                                    <textarea th:field="*{json}" class="form-control" id="exampleFormControlTextarea1"
+                                              rows="3"></textarea>
                                     <br/>
                                     <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Request
                                     </button>
                                     <br/>
-                                    <div class="alert alert-danger" role="alert">Eiiiiii, don't do this...WTF?!</div>
-                                </div>
-                            </form>
+                                </form>
+                                <div class="alert alert-danger" role="alert"><span th:text="*{errorMsg}"></span></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header" id="headingThree">
+                            <h4 class="mb-0">Result</h4>
+                        </div>
+                        <div class="card-body">
+                            <textarea th:text="*{result}" class="form-control" id="resultTextArea" rows="3"
+                                      contenteditable="false"></textarea>
+                            <br/>
                         </div>
                     </div>
                 </div>

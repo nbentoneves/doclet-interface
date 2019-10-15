@@ -1,0 +1,21 @@
+matrix:
+  include:
+    - language: java
+      sudo: false
+      jdk: openjdk8
+      cache:
+        directories:
+          - "~/.m2/repository"
+      branches:
+        only:
+          - master
+      install:
+        - mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      script:
+        - mvn test jacoco:report
+      after_success:
+        - mvn -P=coveralls-report coveralls:report -Dcoveralls-token=$COVERALLS_TOKEN
+
+notifications:
+  email:
+    - nbento.neves@gmail.com

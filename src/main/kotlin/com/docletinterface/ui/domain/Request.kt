@@ -1,4 +1,4 @@
-package com.docletinterface.doclet.domain
+package com.docletinterface.ui.domain
 
 open class Request{
 

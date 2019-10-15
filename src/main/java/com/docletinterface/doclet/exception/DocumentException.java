@@ -1,4 +1,4 @@
-package com.docletinterface.doclet;
+package com.docletinterface.doclet.exception;
 
 public class DocumentException extends RuntimeException {
 

@@ -6,6 +6,8 @@ import java.util.StringJoiner;
 
 public class DocMethod {
 
+    private final String packageName;
+
     private final String className;
 
     private final String methodName;
@@ -13,15 +15,22 @@ public class DocMethod {
     private final String methodDescription;
 
     private final String returnObject;
+    private final String returnObjectDescription;
 
-    private final Map<Integer, String> paramObjects;
+    private final Map<Integer, ParameterType> paramObjects;
 
     private DocMethod(Builder builder) {
+        this.packageName = builder.packageName;
         this.className = builder.className;
         this.methodName = builder.methodName;
         this.methodDescription = builder.methodDescription;
         this.returnObject = builder.returnObject;
+        this.returnObjectDescription = builder.returnObjectDescription;
         this.paramObjects = builder.paramObjects;
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 
     public String getClassName() {
@@ -40,28 +49,41 @@ public class DocMethod {
         return returnObject;
     }
 
-    public Map<Integer, String> getParamObjects() {
+    public String getReturnObjectDescription() {
+        return returnObjectDescription;
+    }
+
+    public Map<Integer, ParameterType> getParamObjects() {
         return paramObjects;
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", DocMethod.class.getSimpleName() + "[", "]")
+                .add("packageName='" + packageName + "'")
                 .add("className='" + className + "'")
                 .add("methodName='" + methodName + "'")
                 .add("methodDescription='" + methodDescription + "'")
                 .add("returnObject='" + returnObject + "'")
+                .add("returnObjectDescription='" + returnObjectDescription + "'")
                 .add("paramObjects=" + paramObjects)
                 .toString();
     }
 
     public static class Builder {
 
+        private String packageName;
         private String className;
         private String methodName;
         private String methodDescription;
         private String returnObject;
-        private Map<Integer, String> paramObjects = new HashMap<>();
+        private String returnObjectDescription;
+        private Map<Integer, ParameterType> paramObjects = new HashMap<>();
+
+        public Builder withPackageName(String packageName) {
+            this.packageName = packageName;
+            return this;
+        }
 
         public Builder withClassName(String className) {
             this.className = className;
@@ -83,7 +105,12 @@ public class DocMethod {
             return this;
         }
 
-        public Builder addParamObjects(int position, String param) {
+        public Builder withReturnObjectDescription(String returnObjectDescription) {
+            this.returnObjectDescription = returnObjectDescription;
+            return this;
+        }
+
+        public Builder addParamObjects(int position, ParameterType param) {
             paramObjects.put(position, param);
             return this;
         }
