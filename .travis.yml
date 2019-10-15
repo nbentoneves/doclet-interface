@@ -10,7 +10,11 @@ matrix:
         only:
           - master
       install:
-        - mvn -f pom.xml install -B -V
+        - mvn test-compile -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      script:
+        - mvn test jacoco:report
+      after_success:
+        - mvn -P=coveralls-report coveralls:report -Dcoveralls-token=$COVERALLS-TOKEN
 
 notifications:
   email:

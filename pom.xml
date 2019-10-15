@@ -34,6 +34,10 @@
         <!-- Testing dependencies -->
         <junitparam.version>1.1.1</junitparam.version>
         <jacoco.version>0.8.4</jacoco.version>
+        <coveralls.version>4.3.0</coveralls.version>
+
+        <!-- General properties -->
+        <coveralls-token/>
     </properties>
 
     <dependencyManagement>
@@ -109,7 +113,31 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>coveralls-report</id>
+            <build>
+                <plugins>
+                    <!-- Testing report -->
+                    <plugin>
+                        <groupId>org.eluder.coveralls</groupId>
+                        <artifactId>coveralls-maven-plugin</artifactId>
+                        <version>${coveralls.version}</version>
+                        <configuration>
+                            <repoToken>${coveralls-token}</repoToken>
+                            <sourceDirectories>
+                                <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
+                                <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                            </sourceDirectories>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
+
         <!-- Add plugin manager -->
         <plugins>
             <plugin>
@@ -219,6 +247,8 @@
                             <haltOnFailure>false</haltOnFailure>
                             <excludes>
                                 <exclude>com/docletinterface/testing/**/*.class</exclude>
+                                <exclude>com/docletinterface/ui/DocletInterfaceException.class</exclude>
+                                <exclude>com/docletinterface/ui/DocletInterfaceException.kt</exclude>
                             </excludes>
                             <rules>
                                 <rule>
