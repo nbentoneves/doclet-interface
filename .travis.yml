@@ -14,7 +14,7 @@ matrix:
       script:
         - mvn test jacoco:report
       after_success:
-        - mvn -P=coveralls-report coveralls:report -Dcoveralls-token=$COVERALLS-TOKEN
+        - mvn -P=coveralls-report coveralls:report -Dcoveralls-token=COVERALLS-TOKEN
 
 notifications:
   email:
