@@ -9,7 +9,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.doclet-interface.helper</groupId>
+    <groupId>com.sesame.helper</groupId>
     <artifactId>sesame-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
@@ -248,7 +248,7 @@
                             <excludes>
                                 <exclude>com/docletinterface/testing/**/*.class</exclude>
                                 <exclude>com/docletinterface/ui/DocletInterfaceException.class</exclude>
-                                <exclude>com/docletinterface/ui/DocletInterfaceException.kt</exclude>
+                                <exclude>com/docletinterface/ui/SesameJavaException.kt</exclude>
                             </excludes>
                             <rules>
                                 <rule>
