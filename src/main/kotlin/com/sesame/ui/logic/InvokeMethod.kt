@@ -1,12 +1,13 @@
-package com.docletinterface.ui.logic
+package com.sesame.ui.logic
 
-import com.docletinterface.domain.internal.DocMethod
-import com.docletinterface.domain.internal.ParameterType
-import com.docletinterface.ui.logic.exception.DeserializationException
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.sesame.domain.internal.DocMethod
+import com.sesame.domain.internal.ParameterType
+import com.sesame.ui.SesameJavaException
+import com.sesame.ui.logic.exception.DeserializationException
 import org.slf4j.LoggerFactory
 import java.lang.reflect.Method
 import javax.naming.OperationNotSupportedException
@@ -21,24 +22,32 @@ class InvokeMethod {
         private val LOGGER = LoggerFactory.getLogger(InvokeMethod::class.java)
 
         fun invoke(metadata: DocMethod, jsondata: String): Any {
-            val classInstance = Class.forName(defineClassPath(metadata)).newInstance()
 
-            val parametersMapping = deserialization(jsondata, metadata.paramObjects)
-            val listOfParametersType = parametersMapping.map { it.value.java }.toTypedArray()
-            val listOfParametersValues = parametersMapping.map { it.key }.toTypedArray()
+            try {
 
-            LOGGER.debug("List of parameters... listOfParameters={}", listOfParametersType)
-            LOGGER.debug("List of parameters... listOfParametersValues={}", listOfParametersValues)
+                val classInstance = Class.forName(defineClassPath(metadata)).newInstance()
 
-            val method = classInstance!!.javaClass.getMethod(metadata.methodName, *listOfParametersType)
+                val parametersMapping = deserialization(jsondata, metadata.paramObjects)
+                val listOfParametersType = parametersMapping.map { it.value.java }.toTypedArray()
+                val listOfParametersValues = parametersMapping.map { it.key }.toTypedArray()
 
-            LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
+                LOGGER.debug("List of parameters... listOfParameters={}", listOfParametersType)
+                LOGGER.debug("List of parameters... listOfParametersValues={}", listOfParametersValues)
 
-            val result = serialization(classInstance, method, listOfParametersValues)
+                val method = classInstance!!.javaClass.getMethod(metadata.methodName, *listOfParametersType)
 
-            LOGGER.info("Result serialized... result={}", result)
+                LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
 
-            return result
+                val result = serialization(classInstance, method, listOfParametersValues)
+
+                LOGGER.info("Result serialized... result={}", result)
+
+                return result
+
+            } catch (ex: Exception) {
+                throw SesameJavaException("Can't execute the class/method, please check the configuration files or javadocs", ex)
+            }
+
         }
 
         private fun defineClassPath(metadata: DocMethod) = run { metadata.packageName + "." + metadata.className }

@@ -1,4 +1,4 @@
-package com.docletinterface.doclet.exception;
+package com.sesame.worker.exception;
 
 public class DocumentException extends RuntimeException {
 

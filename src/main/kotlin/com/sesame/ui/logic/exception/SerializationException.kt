@@ -1,8 +1,8 @@
-package com.docletinterface.ui.logic.exception
+package com.sesame.ui.logic.exception
 
-import com.docletinterface.ui.DocletInterfaceException
+import com.sesame.ui.SesameJavaException
 
-class SerializationException : DocletInterfaceException{
+class SerializationException : SesameJavaException{
 
     constructor(message: String, ex: Exception?) : super(message, ex)
     constructor(message: String) : super(message)

@@ -1,9 +1,9 @@
-package com.docletinterface.ui.controller
+package com.sesame.ui.controller
 
-import com.docletinterface.domain.internal.DocMethod
-import com.docletinterface.ui.DocletInterfaceException
-import com.docletinterface.ui.domain.Request
-import com.docletinterface.ui.logic.InvokeMethod
+import com.sesame.domain.internal.DocMethod
+import com.sesame.ui.SesameJavaException
+import com.sesame.ui.domain.Request
+import com.sesame.ui.logic.InvokeMethod
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
@@ -54,7 +54,7 @@ class IndexController {
         if (value.json != null) {
             try {
                 modelAndView.addObject("result", InvokeMethod.invoke(docMethod, value.json!!))
-            } catch (ex: DocletInterfaceException) {
+            } catch (ex: SesameJavaException) {
                 LOGGER.error("Can't call the method because of: ", ex)
                 modelAndView.addObject("errorMsg", ex.message)
             }

@@ -1,4 +1,4 @@
-package com.docletinterface.ui.domain
+package com.sesame.ui.domain
 
 open class Request{
 
