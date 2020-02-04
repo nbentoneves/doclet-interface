@@ -1,64 +1,29 @@
 package com.sesame.worker;
 
-import com.sun.javadoc.ClassDoc;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.RootDoc;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import static com.sesame.worker.GenDocletInterface.getDocMethod;
-import static com.sesame.worker.GenDocletInterface.start;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
 
 public class GenDocletInterfaceTest {
 
-    @Mock
-    public ClassDoc classDoc;
+    private DocumentationWorker<String> javaDocsDocumentationWorker = new JavaDocsDocumentationWorkerImpl();
 
     @Mock
-    public MethodDoc methodDoc;
-
-    @Mock
-    public RootDoc rootDoc;
-
-    @Before
-    public void setUp() {
-        initMocks(this);
-    }
-
-    @After
-    public void cleanUp() {
-        reset(rootDoc, methodDoc, classDoc);
-    }
+    private DocumentationFactory documentationFactory;
 
     @Test
     public void testWhenRootDocIsNull() {
-        assertFalse(start(null));
-    }
-
-    @Test
-    public void testWhenRootDocNoExistClasses() {
-
-        when(rootDoc.specifiedClasses()).thenReturn(null);
-        assertFalse(start(rootDoc));
-
-    }
-
-    @Test(expected = RuntimeException.class)
-    public void testWhenRootDocIsInvalid() {
-
-        when(rootDoc.specifiedClasses()[0].methods()[0]).thenReturn(null);
-        start(rootDoc);
-
+        when(documentationFactory.getJavaDocsDocumentationWorker()).thenReturn(javaDocsDocumentationWorker);
+        assertFalse(new GenDocletInterface(documentationFactory).start(null));
     }
 
     @Test
     public void testWhenRootDocIsValid() {
+
+        when(documentationFactory.getJavaDocsDocumentationWorker()).thenReturn(javaDocsDocumentationWorker);
+        GenDocletInterface genDocletInterface = new GenDocletInterface(documentationFactory);
 
         String rawCommentTest = "\n" +
                 "Test javadoc\n" +
@@ -78,12 +43,8 @@ public class GenDocletInterfaceTest {
                 "* </pre>\n" +
                 "*/";
 
-        when(classDoc.methods()).thenReturn(new MethodDoc[]{methodDoc});
-        when(methodDoc.getRawCommentText()).thenReturn(rawCommentTest);
-        when(rootDoc.specifiedClasses()).thenReturn(new ClassDoc[]{classDoc});
-
-        assertTrue(start(rootDoc));
-        assertNotNull(getDocMethod());
+        assertTrue(genDocletInterface.start(rawCommentTest));
+        assertNotNull(genDocletInterface.getDocMethod());
 
     }
 

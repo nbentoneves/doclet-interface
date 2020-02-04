@@ -1,35 +1,18 @@
 package com.sesame.worker;
 
-import com.sesame.worker.exception.DocumentInvalidFormatException;
 import com.sesame.domain.internal.DocMethod;
 import com.sesame.domain.internal.ParameterType;
 import com.sesame.util.DocletUtils;
-import com.sun.javadoc.MethodDoc;
+import com.sesame.worker.exception.DocumentInvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
 
-/**
- * TODO: Remove this documentation
- * <pre>
- *
- * @doclib
- *  methodName: startMethod
- *  methodDescription: Description
- *  return: String - Description
- *  param-1: Int - Description
- *  param-2: XptoObject - Description
- *  ...
- *
- * @enddoclib
- *
- * </pre>
- */
-public class DocumentationWorkerImpl implements DocumentationWorker<MethodDoc> {
+public class JavaDocsDocumentationWorkerImpl implements DocumentationWorker<String> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(DocumentationWorkerImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(JavaDocsDocumentationWorkerImpl.class);
 
     private static final String DELIMITATOR_COLON = ":";
     private static final String DELIMITATOR_DASH = "-";
@@ -46,13 +29,13 @@ public class DocumentationWorkerImpl implements DocumentationWorker<MethodDoc> {
     }
 
     @Override
-    public Optional<DocMethod> processInterfaceMethod(MethodDoc documentation) {
+    public Optional<DocMethod> processInterfaceMethod(String documentation) {
 
         if (documentation == null) {
             return Optional.empty();
         }
 
-        Optional<String> filterDocumentation = DocletUtils.extractDoclibTags(documentation.getRawCommentText());
+        Optional<String> filterDocumentation = DocletUtils.extractDoclibTags(documentation);
 
         if (!filterDocumentation.isPresent()) {
             return Optional.empty();

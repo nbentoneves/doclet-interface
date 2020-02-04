@@ -1,11 +1,11 @@
 package com.sesame.worker;
 
-import com.sun.javadoc.MethodDoc;
+import org.yaml.snakeyaml.Yaml;
 
 public interface DocumentationFactory {
 
-    DocumentationWorker<MethodDoc> createJavaDocsWorker();
+    DocumentationWorker<String> getJavaDocsDocumentationWorker();
 
-    DocumentationWorker<?> createYmlWorker();
+    DocumentationWorker<Yaml> getYamlDocumentationWorker();
 
 }

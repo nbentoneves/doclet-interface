@@ -1,37 +1,42 @@
 package com.sesame.worker;
 
 import com.sesame.domain.internal.DocMethod;
-import com.sun.javadoc.Doclet;
-import com.sun.javadoc.MethodDoc;
-import com.sun.javadoc.RootDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-
-public class GenDocletInterface extends Doclet {
+@Component
+public class GenDocletInterface {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(GenDocletInterface.class);
 
-    private static DocMethod docMethod;
+    private DocMethod docMethod;
 
-    public static boolean start(RootDoc root) {
+    private DocumentationFactory documentationFactory;
+
+    public GenDocletInterface(@Autowired DocumentationFactory documentationFactory) {
+        this.documentationFactory = documentationFactory;
+    }
+
+    public boolean start(String root) {
 
         //FIXME: How can extract this to set/constructor injection
-        DocumentationWorker<MethodDoc> worker = new DocumentationFactoryImpl().createJavaDocsWorker();
+        DocumentationWorker<String> worker = documentationFactory.getJavaDocsDocumentationWorker();
 
-        if (root == null || root.specifiedClasses() == null || root.specifiedClasses().length == 0) {
+        if (root == null || root.isEmpty()) {
             LOGGER.error("Can't process any source. Please check the property inserted!");
             return false;
         }
 
-        docMethod = worker.processInterfaceMethod(root.specifiedClasses()[0].methods()[0]).orElseThrow(
+        docMethod = worker.processInterfaceMethod(root).orElseThrow(
                 () -> new RuntimeException("Can not find any documentation generated!"));
         LOGGER.info("{}", docMethod);
 
         return true;
     }
 
-    public static DocMethod getDocMethod() {
+    public DocMethod getDocMethod() {
         return docMethod;
     }
 

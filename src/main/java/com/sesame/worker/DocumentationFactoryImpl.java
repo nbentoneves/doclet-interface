@@ -1,17 +1,29 @@
 package com.sesame.worker;
 
-import com.sun.javadoc.MethodDoc;
+import org.springframework.stereotype.Component;
+import org.yaml.snakeyaml.Yaml;
 
+@Component
 public final class DocumentationFactoryImpl implements DocumentationFactory {
 
-    @Override
-    public final DocumentationWorker<MethodDoc> createJavaDocsWorker() {
-        return new DocumentationWorkerImpl();
+    private DocumentationWorker<String> javaDocsDocumentationWorker;
+
+    private DocumentationWorker<Yaml> yamlDocumentationWorker;
+
+    public DocumentationFactoryImpl(DocumentationWorker<String> javaDocsDocumentationWorker,
+                                    DocumentationWorker<Yaml> yamlDocumentationWorker) {
+        this.javaDocsDocumentationWorker = javaDocsDocumentationWorker;
+        this.yamlDocumentationWorker = yamlDocumentationWorker;
     }
 
     @Override
-    public final DocumentationWorker<?> createYmlWorker() {
-        throw new UnsupportedOperationException("Need to implement this worker!");
+    public final DocumentationWorker<String> getJavaDocsDocumentationWorker() {
+        return javaDocsDocumentationWorker;
+    }
+
+    @Override
+    public final DocumentationWorker<Yaml> getYamlDocumentationWorker() {
+        return yamlDocumentationWorker;
     }
 
 }

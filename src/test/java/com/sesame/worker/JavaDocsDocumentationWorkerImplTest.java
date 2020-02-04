@@ -1,57 +1,34 @@
 package com.sesame.worker;
 
-import com.sesame.worker.exception.DocumentInvalidFormatException;
 import com.sesame.domain.internal.DocMethod;
 import com.sesame.domain.internal.ParameterType;
-import com.sun.javadoc.MethodDoc;
+import com.sesame.worker.exception.DocumentInvalidFormatException;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(JUnitParamsRunner.class)
-public class DocumentationWorkerImplTest {
+public class JavaDocsDocumentationWorkerImplTest {
 
     private DocumentationWorker victim;
-
-    @Mock
-    public MethodDoc methodDoc;
 
     @Before
     public void setUp() {
         initMocks(this);
-        victim = new DocumentationWorkerImpl();
-    }
-
-    @After
-    public void cleanUp() {
-        reset(methodDoc);
+        victim = new JavaDocsDocumentationWorkerImpl();
     }
 
     @Test
     public void testExtractEmptyRawCommentValidDocMethod() {
-
-        when(methodDoc.getRawCommentText()).thenReturn("");
-        assertFalse(victim.processInterfaceMethod(methodDoc).isPresent());
-
-    }
-
-    @Test
-    public void testExtractInvalidDocMethod() {
-
-        when(methodDoc.getRawCommentText()).thenReturn(null);
-        assertFalse(victim.processInterfaceMethod(methodDoc).isPresent());
-
+        assertFalse(victim.processInterfaceMethod("").isPresent());
     }
 
     @Test
@@ -72,8 +49,7 @@ public class DocumentationWorkerImplTest {
                 "param-2: XptoObject - Description\n" +
                 "@enddoclib ";
 
-        when(methodDoc.getRawCommentText()).thenReturn(documentation);
-        assertFalse(victim.processInterfaceMethod(methodDoc).isPresent());
+        assertFalse(victim.processInterfaceMethod(documentation).isPresent());
 
     }
 
@@ -88,8 +64,7 @@ public class DocumentationWorkerImplTest {
                 "param-2: XptoObject - Description\n" +
                 "";
 
-        when(methodDoc.getRawCommentText()).thenReturn(documentation);
-        assertFalse(victim.processInterfaceMethod(methodDoc).isPresent());
+        assertFalse(victim.processInterfaceMethod(documentation).isPresent());
     }
 
     @Test
@@ -105,8 +80,7 @@ public class DocumentationWorkerImplTest {
                 "param-2: XptoSample - Description\n" +
                 "@enddoclib";
 
-        when(methodDoc.getRawCommentText()).thenReturn(documentation);
-        Optional<DocMethod> docMethod = victim.processInterfaceMethod(methodDoc);
+        Optional<DocMethod> docMethod = victim.processInterfaceMethod(documentation);
 
         assertTrue(docMethod.isPresent());
         assertEquals("className", docMethod.get().getClassName());
@@ -132,8 +106,7 @@ public class DocumentationWorkerImplTest {
                 param2 + "\n" +
                 "@enddoclib";
 
-        when(methodDoc.getRawCommentText()).thenReturn(documentation);
-        Optional<DocMethod> docMethod = victim.processInterfaceMethod(methodDoc);
+        Optional<DocMethod> docMethod = victim.processInterfaceMethod(documentation);
 
         assertTrue(docMethod.isPresent());
         assertEquals("startMethod", docMethod.get().getMethodName());
