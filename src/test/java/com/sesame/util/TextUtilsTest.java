@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.*;
 
-public class DocletUtilsTest {
+public class TextUtilsTest {
 
     @Test
     public void shouldExtractValidFormat() {
@@ -15,7 +15,7 @@ public class DocletUtilsTest {
                 "info" +
                 "@enddoclib";
 
-        Optional<String> result = DocletUtils.extractDoclibTags(commandLine);
+        Optional<String> result = TextUtils.extractDoclibTags(commandLine);
 
         assertTrue(result.isPresent());
         assertEquals(" testinfo", result.get());
@@ -28,20 +28,20 @@ public class DocletUtilsTest {
                 "info" +
                 "@enddoclib";
 
-        Optional<String> result = DocletUtils.extractDoclibTags(commandLine);
+        Optional<String> result = TextUtils.extractDoclibTags(commandLine);
 
         assertFalse(result.isPresent());
     }
 
     @Test
     public void shouldNotExtractNullValue() {
-        Optional<String> result = DocletUtils.extractDoclibTags(null);
+        Optional<String> result = TextUtils.extractDoclibTags(null);
         assertFalse(result.isPresent());
     }
 
     @Test
     public void shouldNotExtractEmptyValue() {
-        Optional<String> result = DocletUtils.extractDoclibTags("");
+        Optional<String> result = TextUtils.extractDoclibTags("");
         assertFalse(result.isPresent());
     }
 }

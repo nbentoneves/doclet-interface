@@ -12,18 +12,17 @@ import org.junit.runner.RunWith;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(JUnitParamsRunner.class)
-public class JavaDocsDocumentationWorkerImplTest {
+public class TextDocumentationWorkerImplTest {
 
-    private DocumentationWorker victim;
+    private DocumentationWorker<String> victim;
 
     @Before
     public void setUp() {
         initMocks(this);
-        victim = new JavaDocsDocumentationWorkerImpl();
+        victim = new TextDocumentationWorkerImpl();
     }
 
     @Test

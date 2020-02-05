@@ -6,19 +6,19 @@ import org.yaml.snakeyaml.Yaml;
 @Component
 public final class DocumentationFactoryImpl implements DocumentationFactory {
 
-    private DocumentationWorker<String> javaDocsDocumentationWorker;
+    private DocumentationWorker<String> textDocumentationWorker;
 
     private DocumentationWorker<Yaml> yamlDocumentationWorker;
 
-    public DocumentationFactoryImpl(DocumentationWorker<String> javaDocsDocumentationWorker,
+    public DocumentationFactoryImpl(DocumentationWorker<String> textDocumentationWorker,
                                     DocumentationWorker<Yaml> yamlDocumentationWorker) {
-        this.javaDocsDocumentationWorker = javaDocsDocumentationWorker;
+        this.textDocumentationWorker = textDocumentationWorker;
         this.yamlDocumentationWorker = yamlDocumentationWorker;
     }
 
     @Override
-    public final DocumentationWorker<String> getJavaDocsDocumentationWorker() {
-        return javaDocsDocumentationWorker;
+    public final DocumentationWorker<String> getTextDocumentationWorker() {
+        return textDocumentationWorker;
     }
 
     @Override

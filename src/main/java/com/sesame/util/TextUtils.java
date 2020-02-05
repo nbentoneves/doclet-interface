@@ -2,12 +2,12 @@ package com.sesame.util;
 
 import java.util.Optional;
 
-public class DocletUtils {
+public class TextUtils {
 
     private static final String START_TAG_DOCLIB = "@doclib";
     private static final String END_TAG_DOCLIB = "@enddoclib";
 
-    private DocletUtils() {
+    private TextUtils() {
     }
 
     public static Optional<String> extractDoclibTags(String fullMethodComment) {

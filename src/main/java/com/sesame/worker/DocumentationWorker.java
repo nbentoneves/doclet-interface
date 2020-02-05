@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface DocumentationWorker<T> {
 
-    Optional<DocMethod> processInterfaceMethod(T documentation);
+    Optional<DocMethod> processInterfaceMethod(T value);
 
 }

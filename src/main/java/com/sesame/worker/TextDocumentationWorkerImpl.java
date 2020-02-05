@@ -2,7 +2,7 @@ package com.sesame.worker;
 
 import com.sesame.domain.internal.DocMethod;
 import com.sesame.domain.internal.ParameterType;
-import com.sesame.util.DocletUtils;
+import com.sesame.util.TextUtils;
 import com.sesame.worker.exception.DocumentInvalidFormatException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +10,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Optional;
 import java.util.regex.PatternSyntaxException;
 
-public class JavaDocsDocumentationWorkerImpl implements DocumentationWorker<String> {
+public class TextDocumentationWorkerImpl implements DocumentationWorker<String> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(JavaDocsDocumentationWorkerImpl.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(TextDocumentationWorkerImpl.class);
 
     private static final String DELIMITATOR_COLON = ":";
     private static final String DELIMITATOR_DASH = "-";
@@ -29,13 +29,13 @@ public class JavaDocsDocumentationWorkerImpl implements DocumentationWorker<Stri
     }
 
     @Override
-    public Optional<DocMethod> processInterfaceMethod(String documentation) {
+    public Optional<DocMethod> processInterfaceMethod(String configs) {
 
-        if (documentation == null) {
+        if (configs == null) {
             return Optional.empty();
         }
 
-        Optional<String> filterDocumentation = DocletUtils.extractDoclibTags(documentation);
+        Optional<String> filterDocumentation = TextUtils.extractDoclibTags(configs);
 
         if (!filterDocumentation.isPresent()) {
             return Optional.empty();
@@ -83,7 +83,7 @@ public class JavaDocsDocumentationWorkerImpl implements DocumentationWorker<Stri
                         break;
                     case PARAM:
                         String paramDocumentation = line.split(DELIMITATOR_COLON)[1].trim();
-                        int paramIndex = Integer.valueOf(line.split(DELIMITATOR_COLON)[0].split(DELIMITATOR_DASH)[1]);
+                        int paramIndex = Integer.parseInt(line.split(DELIMITATOR_COLON)[0].split(DELIMITATOR_DASH)[1]);
 
                         try {
                             String paramDescription = paramDocumentation.split(DELIMITATOR_DASH)[1].trim();

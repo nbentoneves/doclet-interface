@@ -4,7 +4,7 @@ import org.yaml.snakeyaml.Yaml;
 
 public interface DocumentationFactory {
 
-    DocumentationWorker<String> getJavaDocsDocumentationWorker();
+    DocumentationWorker<String> getTextDocumentationWorker();
 
     DocumentationWorker<Yaml> getYamlDocumentationWorker();
 
