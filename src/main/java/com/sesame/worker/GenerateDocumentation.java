@@ -9,14 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-
-import static java.nio.file.Paths.get;
 
 @Component
 public class GenerateDocumentation {
@@ -50,6 +46,7 @@ public class GenerateDocumentation {
 
                 if (docMethod.isPresent()) {
                     LOGGER.info("{}", docMethod);
+                    this.docMethod = docMethod.get();
                     return true;
                 }
 

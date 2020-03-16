@@ -9,4 +9,4 @@ ENV SOURCE_CONFIG_FILE=${SOURCE_CONFIG_FILE_PATH}
 COPY ${JAR_FILE} /app.jar
 
 # run application with this command line
-CMD ["/usr/bin/java", "-jar", "-Dsource.config.file=${SOURCE_CONFIG_FILE}", "-Dspring.profiles.active=default", "/app.jar"]
+CMD ["/usr/bin/java", "-jar", "-Dconfig.file.path=${SOURCE_CONFIG_FILE}", "-Dspring.profiles.active=default", "/app.jar"]

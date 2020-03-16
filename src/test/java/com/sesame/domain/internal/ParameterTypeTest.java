@@ -22,8 +22,8 @@ public class ParameterTypeTest {
     @SuppressWarnings("unused")
     private static Object[][] dataInvalidDocumentation() {
         return new Object[][]{
-                {ParameterType.BOOLEAN, "boolean", Boolean.class},
-                {ParameterType.INT, "int", Integer.class},
+                {ParameterType.BOOLEAN, "boolean", boolean.class},
+                {ParameterType.INT, "int", int.class},
                 {ParameterType.OBJECT, "object", Object.class}
         };
     }

@@ -36,6 +36,7 @@
         <junitparam.version>1.1.1</junitparam.version>
         <jacoco.version>0.8.4</jacoco.version>
         <coveralls.version>4.3.0</coveralls.version>
+        <mockk.version>1.9.3</mockk.version>
 
         <!-- General properties -->
         <coveralls-token/>
@@ -62,6 +63,11 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-test-junit5</artifactId>
                 <version>${kotlin.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mockk</groupId>
+                <artifactId>mockk</artifactId>
+                <version>${mockk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -125,6 +131,11 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

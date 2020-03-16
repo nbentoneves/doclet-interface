@@ -4,14 +4,18 @@ import java.util.Arrays;
 
 public enum ParameterType {
 
-    INT("int", Integer.class),
-    BOOLEAN("boolean", Boolean.class),
-    OBJECT("object", Object.class);
+    INT("int", int.class, true),
+    DOUBLE("double", double.class, true),
+    INTEGER("integer", Integer.class, false),
+    STRING("string", String.class, false),
+    BOOLEAN("boolean", boolean.class, true),
+    OBJECT("object", Object.class, false);
 
     private String displayType;
     private Class internalType;
+    private boolean isPrimitive;
 
-    ParameterType(String displayType, Class internalType) {
+    ParameterType(String displayType, Class internalType, boolean isPrimitive) {
         this.displayType = displayType;
         this.internalType = internalType;
     }
@@ -22,6 +26,10 @@ public enum ParameterType {
 
     public Class getInternalType() {
         return this.internalType;
+    }
+
+    public boolean isPrimitive() {
+        return isPrimitive;
     }
 
     public static ParameterType getInternalType(String displayType) {

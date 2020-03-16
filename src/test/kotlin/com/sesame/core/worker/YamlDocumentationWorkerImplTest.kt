@@ -1,5 +1,6 @@
 package com.sesame.core.worker
 
+import com.sesame.core.InvokerTest
 import org.yaml.snakeyaml.Yaml
 import kotlin.test.BeforeTest
 import kotlin.test.Test

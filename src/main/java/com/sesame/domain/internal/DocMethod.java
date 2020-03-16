@@ -1,9 +1,9 @@
 package com.sesame.domain.internal;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 
+//TODO: Should be created a method to check if all "must have" information was collected
+//TODO: Should check if all attributes are immutables
 public class DocMethod {
 
     private final String packageName;
@@ -20,6 +20,8 @@ public class DocMethod {
 
     private final Map<Integer, ParameterType> paramObjects;
 
+    private final List<String> pathOfBeans;
+
     private DocMethod(Builder builder) {
         this.packageName = builder.packageName;
         this.className = builder.className;
@@ -28,6 +30,7 @@ public class DocMethod {
         this.returnObject = builder.returnObject;
         this.returnObjectDescription = builder.returnObjectDescription;
         this.paramObjects = builder.paramObjects;
+        this.pathOfBeans = builder.pathOfBeans;
     }
 
     public String getPackageName() {
@@ -58,6 +61,10 @@ public class DocMethod {
         return paramObjects;
     }
 
+    public List<String> getPathOfBeans() {
+        return pathOfBeans;
+    }
+
     @Override
     public String toString() {
         return new StringJoiner(", ", DocMethod.class.getSimpleName() + "[", "]")
@@ -68,6 +75,7 @@ public class DocMethod {
                 .add("returnObject='" + returnObject + "'")
                 .add("returnObjectDescription='" + returnObjectDescription + "'")
                 .add("paramObjects=" + paramObjects)
+                .add("pathOfBeans=" + pathOfBeans)
                 .toString();
     }
 
@@ -80,6 +88,7 @@ public class DocMethod {
         private String returnObject;
         private String returnObjectDescription;
         private Map<Integer, ParameterType> paramObjects = new HashMap<>();
+        private List<String> pathOfBeans = new ArrayList<>();
 
         public Builder withPackageName(String packageName) {
             this.packageName = packageName;
@@ -108,6 +117,11 @@ public class DocMethod {
 
         public Builder withReturnObjectDescription(String returnObjectDescription) {
             this.returnObjectDescription = returnObjectDescription;
+            return this;
+        }
+
+        public Builder addPathOfBeans(String pathOfBeans){
+            this.pathOfBeans.add(pathOfBeans);
             return this;
         }
 

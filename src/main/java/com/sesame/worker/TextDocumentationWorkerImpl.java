@@ -24,8 +24,10 @@ public class TextDocumentationWorkerImpl implements DocumentationWorker<String> 
     private static final String FIELD_RETURN = "return";
     private static final String FIELD_PARAM = "param";
 
+    private static final String FIELD_BEANS = "xmlBeans";
+
     private enum Tag {
-        PACKAGE_NAME, CLASS_NAME, METHOD_NAME, METHOD_DESCRIPTION, RETURN, PARAM, OTHER;
+        PACKAGE_NAME, CLASS_NAME, METHOD_NAME, METHOD_DESCRIPTION, RETURN, PARAM, PATH_BEANS, OTHER;
     }
 
     @Override
@@ -94,6 +96,11 @@ public class TextDocumentationWorkerImpl implements DocumentationWorker<String> 
                         }
 
                         break;
+                    case PATH_BEANS:
+                        String pathOfBeans = line.split(DELIMITATOR_COLON)[1].trim();
+                        docMethod.addPathOfBeans(pathOfBeans);
+
+                        break;
                     default:
                         break;
                 }
@@ -121,6 +128,8 @@ public class TextDocumentationWorkerImpl implements DocumentationWorker<String> 
             return Tag.CLASS_NAME;
         } else if (line.startsWith(FIELD_PACKAGENAME)) {
             return Tag.PACKAGE_NAME;
+        } else if (line.startsWith(FIELD_BEANS)) {
+            return Tag.PATH_BEANS;
         }
 
         return Tag.OTHER;

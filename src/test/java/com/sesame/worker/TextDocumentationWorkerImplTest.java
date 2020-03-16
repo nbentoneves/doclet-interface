@@ -77,6 +77,7 @@ public class TextDocumentationWorkerImplTest {
                 "return: String - Description\n" +
                 "param-1: Int - Description\n" +
                 "param-2: XptoSample - Description\n" +
+                "xmlBeans: /src/main/resources/config/config.xml\n" +
                 "@enddoclib";
 
         Optional<DocMethod> docMethod = victim.processInterfaceMethod(documentation);
@@ -87,6 +88,7 @@ public class TextDocumentationWorkerImplTest {
         assertEquals("startMethod", docMethod.get().getMethodName());
         assertEquals("Description", docMethod.get().getMethodDescription());
         assertEquals("String", docMethod.get().getReturnObject());
+        assertTrue(docMethod.get().getPathOfBeans().contains("/src/main/resources/config/config.xml"));
 
         assertEquals(ParameterType.INT, docMethod.get().getParamObjects().get(1));
         assertEquals(ParameterType.OBJECT, docMethod.get().getParamObjects().get(2));

@@ -4,7 +4,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = [
+    "com.sesame.core",
+    "com.sesame.ui"
+])
 open class SesameJavaApplication {
 
     open fun runService(args: Array<String>) {
