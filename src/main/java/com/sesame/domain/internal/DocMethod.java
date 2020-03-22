@@ -6,8 +6,12 @@ import java.util.*;
 //TODO: Should check if all attributes are immutables
 public class DocMethod {
 
+    private final String beanIdentification;
+
+    @Deprecated
     private final String packageName;
 
+    @Deprecated
     private final String className;
 
     private final String methodName;
@@ -20,8 +24,6 @@ public class DocMethod {
 
     private final Map<Integer, ParameterType> paramObjects;
 
-    private final List<String> pathOfBeans;
-
     private DocMethod(Builder builder) {
         this.packageName = builder.packageName;
         this.className = builder.className;
@@ -30,7 +32,7 @@ public class DocMethod {
         this.returnObject = builder.returnObject;
         this.returnObjectDescription = builder.returnObjectDescription;
         this.paramObjects = builder.paramObjects;
-        this.pathOfBeans = builder.pathOfBeans;
+        this.beanIdentification = builder.beanIdentification;
     }
 
     public String getPackageName() {
@@ -61,13 +63,14 @@ public class DocMethod {
         return paramObjects;
     }
 
-    public List<String> getPathOfBeans() {
-        return pathOfBeans;
+    public String getBeanIdentification() {
+        return beanIdentification;
     }
 
     @Override
     public String toString() {
         return new StringJoiner(", ", DocMethod.class.getSimpleName() + "[", "]")
+                .add("beanIdentification=" + beanIdentification)
                 .add("packageName='" + packageName + "'")
                 .add("className='" + className + "'")
                 .add("methodName='" + methodName + "'")
@@ -75,12 +78,12 @@ public class DocMethod {
                 .add("returnObject='" + returnObject + "'")
                 .add("returnObjectDescription='" + returnObjectDescription + "'")
                 .add("paramObjects=" + paramObjects)
-                .add("pathOfBeans=" + pathOfBeans)
                 .toString();
     }
 
     public static class Builder {
 
+        private String beanIdentification;
         private String packageName;
         private String className;
         private String methodName;
@@ -88,7 +91,11 @@ public class DocMethod {
         private String returnObject;
         private String returnObjectDescription;
         private Map<Integer, ParameterType> paramObjects = new HashMap<>();
-        private List<String> pathOfBeans = new ArrayList<>();
+
+        public Builder withBeanIdentification(String beanIdentification){
+            this.beanIdentification = beanIdentification;
+            return this;
+        }
 
         public Builder withPackageName(String packageName) {
             this.packageName = packageName;
@@ -117,11 +124,6 @@ public class DocMethod {
 
         public Builder withReturnObjectDescription(String returnObjectDescription) {
             this.returnObjectDescription = returnObjectDescription;
-            return this;
-        }
-
-        public Builder addPathOfBeans(String pathOfBeans){
-            this.pathOfBeans.add(pathOfBeans);
             return this;
         }
 

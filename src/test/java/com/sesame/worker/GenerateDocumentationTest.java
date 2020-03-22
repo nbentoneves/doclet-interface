@@ -1,5 +1,6 @@
 package com.sesame.worker;
 
+import com.sesame.core.worker.DocumentationWorker;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -17,7 +18,7 @@ public class GenerateDocumentationTest {
     private GenerateDocumentation victim;
 
     @Mock
-    private DocumentationWorker<String> textDocumentationWorker;
+    private DocumentationWorker textDocumentationWorker;
 
     @Mock
     private DocumentationFactory documentationFactory;

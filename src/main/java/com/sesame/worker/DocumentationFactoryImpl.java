@@ -1,28 +1,28 @@
 package com.sesame.worker;
 
+import com.sesame.core.worker.DocumentationWorker;
 import org.springframework.stereotype.Component;
-import org.yaml.snakeyaml.Yaml;
 
 @Component
 public final class DocumentationFactoryImpl implements DocumentationFactory {
 
-    private DocumentationWorker<String> textDocumentationWorker;
+    private DocumentationWorker textDocumentationWorker;
 
-    private DocumentationWorker<Yaml> yamlDocumentationWorker;
+    private DocumentationWorker yamlDocumentationWorker;
 
-    public DocumentationFactoryImpl(DocumentationWorker<String> textDocumentationWorker,
-                                    DocumentationWorker<Yaml> yamlDocumentationWorker) {
+    public DocumentationFactoryImpl(DocumentationWorker textDocumentationWorker,
+                                    DocumentationWorker yamlDocumentationWorker) {
         this.textDocumentationWorker = textDocumentationWorker;
         this.yamlDocumentationWorker = yamlDocumentationWorker;
     }
 
     @Override
-    public final DocumentationWorker<String> getTextDocumentationWorker() {
+    public final DocumentationWorker getTextDocumentationWorker() {
         return textDocumentationWorker;
     }
 
     @Override
-    public final DocumentationWorker<Yaml> getYamlDocumentationWorker() {
+    public final DocumentationWorker getYamlDocumentationWorker() {
         return yamlDocumentationWorker;
     }
 

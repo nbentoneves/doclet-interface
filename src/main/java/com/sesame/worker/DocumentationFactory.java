@@ -1,11 +1,11 @@
 package com.sesame.worker;
 
-import org.yaml.snakeyaml.Yaml;
+import com.sesame.core.worker.DocumentationWorker;
 
 public interface DocumentationFactory {
 
-    DocumentationWorker<String> getTextDocumentationWorker();
+    DocumentationWorker getTextDocumentationWorker();
 
-    DocumentationWorker<Yaml> getYamlDocumentationWorker();
+    DocumentationWorker getYamlDocumentationWorker();
 
 }

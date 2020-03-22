@@ -5,11 +5,13 @@ import com.sesame.core.json.JsonSerializable
 import com.sesame.domain.internal.DocMethod
 import com.sesame.ui.SesameJavaException
 import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationContext
 import java.util.*
 
 class Invoker(private val metadata: DocMethod,
               private val jsonDeserializable: JsonDeserializable,
-              private val jsonSerializable: JsonSerializable) {
+              private val jsonSerializable: JsonSerializable,
+              private val applicationContext: ApplicationContext) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(Invoker::class.java)
@@ -31,10 +33,9 @@ class Invoker(private val metadata: DocMethod,
 
                 if (listOfParametersType.isNotEmpty() && listOfParametersValues.isNotEmpty()) {
 
-                    //FIXME: We should check if classInstance is a valid instance
-                    val classInstance = Class.forName(defineClassPath(metadata)).newInstance()
+                    val classInstance: Any = applicationContext.getBean(metadata.beanIdentification)
 
-                    val method = classInstance!!::class.java.getMethod(metadata.methodName, *listOfParametersType)
+                    val method = classInstance::class.java.getMethod(metadata.methodName, *listOfParametersType)
 
                     LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
 
@@ -55,7 +56,5 @@ class Invoker(private val metadata: DocMethod,
         return Optional.empty()
 
     }
-
-    private fun defineClassPath(metadata: DocMethod) = run { metadata.packageName + "." + metadata.className }
 
 }

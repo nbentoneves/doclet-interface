@@ -1,7 +1,6 @@
 package com.sesame.core.worker
 
-import com.sesame.core.InvokerTest
-import org.yaml.snakeyaml.Yaml
+import java.io.File
 import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFalse
@@ -18,10 +17,9 @@ class YamlDocumentationWorkerImplTest {
     }
 
     @Test
-    fun `verify process interface method when receive null or empty value`() {
+    fun `verify process interface method when receive empty file`() {
 
-        assertFalse { yamlDocumentationWorkerImpl.processInterfaceMethod(null).isPresent }
-        assertFalse { yamlDocumentationWorkerImpl.processInterfaceMethod(Yaml()).isPresent }
+        assertFalse { yamlDocumentationWorkerImpl.processInterfaceMethod(File("")).isPresent }
 
     }
 

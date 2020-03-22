@@ -8,6 +8,7 @@ import com.sesame.ui.SesameJavaException
 import com.sesame.ui.domain.Request
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
@@ -15,7 +16,8 @@ import org.springframework.web.servlet.ModelAndView
 
 @Controller
 class IndexController(private val jsonSerializable: JsonSerializable,
-                      private val jsonDeserializable: JsonDeserializable) {
+                      private val jsonDeserializable: JsonDeserializable,
+                      private val applicationContext: ApplicationContext) {
 
     companion object {
         private val LOGGER = LoggerFactory.getLogger(IndexController::class.java)
@@ -56,7 +58,7 @@ class IndexController(private val jsonSerializable: JsonSerializable,
 
         if (value.json != null) {
             try {
-                modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable).method(value.json!!).get())
+                modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable, applicationContext).method(value.json!!).get())
             } catch (ex: SesameJavaException) {
                 LOGGER.error("Can't call the method because of: ", ex)
                 modelAndView.addObject("errorMsg", ex.message)

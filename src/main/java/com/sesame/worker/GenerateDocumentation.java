@@ -1,17 +1,13 @@
 package com.sesame.worker;
 
+import com.sesame.core.worker.DocumentationWorker;
 import com.sesame.domain.internal.DocMethod;
-import com.sesame.worker.exception.DocumentInvalidFormatException;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.File;
 import java.util.Optional;
 
 @Component
@@ -34,27 +30,30 @@ public class GenerateDocumentation {
             return false;
         }
 
-        if (configType.equals("TEXT")) {
+        DocumentationWorker worker;
 
-            DocumentationWorker<String> worker = documentationFactory.getTextDocumentationWorker();
+        switch (configType) {
+            case "TEXT":
+                worker = documentationFactory.getTextDocumentationWorker();
+                break;
 
-            try {
+            case "JSON":
+                worker = documentationFactory.getYamlDocumentationWorker();
+                break;
 
-                String documentation = IOUtils.toString(Files.newInputStream(Paths.get(configPath)), Charset.defaultCharset());
-
-                Optional<DocMethod> docMethod = worker.processInterfaceMethod(documentation);
-
-                if (docMethod.isPresent()) {
-                    LOGGER.info("{}", docMethod);
-                    this.docMethod = docMethod.get();
-                    return true;
-                }
-
-            } catch (IOException ex) {
-                LOGGER.error("msg='Can not extract the value from config variable.'", ex);
-                throw new DocumentInvalidFormatException("Error when try to extract the values form line: ", ex);
-            }
+            default:
+                LOGGER.info("msg='Can not support this type of configuration', configType='{}'", configType);
+                return false;
         }
+
+        Optional<DocMethod> docMethod = worker.processInterfaceMethod(new File(configPath));
+
+        if (docMethod.isPresent()) {
+            LOGGER.info("{}", docMethod);
+            this.docMethod = docMethod.get();
+            return true;
+        }
+
 
         return false;
     }

@@ -5,11 +5,12 @@ import com.sesame.core.json.JsonSerializable
 import com.sesame.core.test.TestClass
 import com.sesame.domain.internal.DocMethod
 import com.sesame.domain.internal.ParameterType
-import io.mockk.MockKAnnotations
+import io.mockk.MockKAnnotations.init
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.context.ApplicationContext
 import kotlin.reflect.KClass
 import kotlin.test.*
 
@@ -26,9 +27,12 @@ class InvokerTest {
     @MockK
     private lateinit var jsonSerializable: JsonSerializable
 
+    @MockK
+    private lateinit var applicationContext: ApplicationContext
+
     @BeforeTest
     fun before() {
-        MockKAnnotations.init(this)
+        init(this)
     }
 
     @Test
@@ -36,7 +40,7 @@ class InvokerTest {
         every { jsonDeserializable.deserialize(any(), any()) } returns mapOf()
         every { metadata.paramObjects } returns mapOf()
 
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable).method("JSON_DATA")
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
         assertFalse { result.isPresent }
@@ -54,11 +58,14 @@ class InvokerTest {
         every { metadata.className } returns TestClass::class.java.simpleName
         every { metadata.methodName } returns "method"
         every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.INT), Pair(2, ParameterType.INT))
+        every { metadata.beanIdentification } returns "bean.identifier"
 
         every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
         every { jsonSerializable.serialize(any(), any(), arrayOf(20, 10)) } returns "30"
 
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable).method("JSON_DATA")
+        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
         assertTrue { result.isPresent }
@@ -78,11 +85,14 @@ class InvokerTest {
         every { metadata.className } returns TestClass::class.java.simpleName
         every { metadata.methodName } returns "method"
         every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.INTEGER), Pair(2, ParameterType.INTEGER))
+        every { metadata.beanIdentification } returns "bean.identifier"
 
         every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
         every { jsonSerializable.serialize(any(), any(), arrayOf(20, 10)) } returns "30"
 
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable).method("JSON_DATA")
+        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
         assertTrue { result.isPresent }
@@ -101,11 +111,14 @@ class InvokerTest {
         every { metadata.className } returns TestClass::class.java.simpleName
         every { metadata.methodName } returns "method"
         every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.STRING))
+        every { metadata.beanIdentification } returns "bean.identifier"
 
         every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
         every { jsonSerializable.serialize(any(), any(), arrayOf("Ola")) } returns "true"
 
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable).method("JSON_DATA")
+        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
         assertTrue { result.isPresent }

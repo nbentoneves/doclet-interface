@@ -1,14 +1,12 @@
 package com.sesame.core.worker
 
 import com.sesame.domain.internal.DocMethod
-import com.sesame.worker.DocumentationWorker
-import org.yaml.snakeyaml.Yaml
+import java.io.File
 import java.util.*
 
-class YamlDocumentationWorkerImpl : DocumentationWorker<Yaml?> {
+class YamlDocumentationWorkerImpl : DocumentationWorker {
 
-    override fun processInterfaceMethod(value: Yaml?): Optional<DocMethod> {
+    override fun processInterfaceMethod(file: File): Optional<DocMethod> {
         return Optional.empty()
     }
-
 }
