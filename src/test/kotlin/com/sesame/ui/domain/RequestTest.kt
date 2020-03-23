@@ -2,9 +2,9 @@ package com.sesame.ui.domain
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotEquals
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Test
 
 class RequestTest {
 

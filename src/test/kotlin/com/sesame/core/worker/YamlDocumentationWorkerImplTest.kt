@@ -1,15 +1,15 @@
 package com.sesame.core.worker
 
+import org.junit.Assert.assertFalse
+import org.junit.Before
+import org.junit.Test
 import java.io.File
-import kotlin.test.BeforeTest
-import kotlin.test.Test
-import kotlin.test.assertFalse
 
 class YamlDocumentationWorkerImplTest {
 
     lateinit var yamlDocumentationWorkerImpl: YamlDocumentationWorkerImpl
 
-    @BeforeTest
+    @Before
     fun before() {
 
         yamlDocumentationWorkerImpl = YamlDocumentationWorkerImpl()
@@ -19,7 +19,7 @@ class YamlDocumentationWorkerImplTest {
     @Test
     fun `verify process interface method when receive empty file`() {
 
-        assertFalse { yamlDocumentationWorkerImpl.processInterfaceMethod(File("")).isPresent }
+        assertFalse(yamlDocumentationWorkerImpl.processInterfaceMethod(File("")).isPresent)
 
     }
 

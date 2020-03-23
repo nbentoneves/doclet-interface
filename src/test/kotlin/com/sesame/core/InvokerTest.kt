@@ -8,12 +8,11 @@ import com.sesame.domain.internal.ParameterType
 import io.mockk.MockKAnnotations.init
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.junit5.MockKExtension
-import org.junit.jupiter.api.extension.ExtendWith
+import org.junit.Assert.*
+import org.junit.Before
+import org.junit.Test
 import org.springframework.context.ApplicationContext
-import kotlin.test.*
 
-@ExtendWith(MockKExtension::class)
 class InvokerTest {
 
     @MockK
@@ -28,7 +27,7 @@ class InvokerTest {
     @MockK
     private lateinit var applicationContext: ApplicationContext
 
-    @BeforeTest
+    @Before
     fun before() {
         init(this)
     }
@@ -41,7 +40,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertFalse { result.isPresent }
+        assertFalse(result.isPresent)
     }
 
     @Test
@@ -68,7 +67,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("true", result.get())
 
     }
@@ -97,7 +96,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("a", result.get())
 
     }
@@ -126,7 +125,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("1", result.get())
 
     }
@@ -155,7 +154,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("10", result.get())
 
     }
@@ -184,7 +183,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("10", result.get())
 
     }
@@ -214,7 +213,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("1000", result.get())
 
     }
@@ -244,7 +243,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("20.5", result.get())
 
     }
@@ -274,7 +273,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("200000000.5", result.get())
 
     }
@@ -304,7 +303,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("Hello World", result.get())
 
     }
@@ -339,7 +338,7 @@ class InvokerTest {
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
         assertNotNull(result)
-        assertTrue { result.isPresent }
+        assertTrue(result.isPresent)
         assertEquals("30", result.get())
 
     }

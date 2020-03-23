@@ -1,5 +1,7 @@
-package com.sesame.domain.internal;
+package com.sesame.internal;
 
+import com.sesame.domain.internal.DocMethod;
+import com.sesame.domain.internal.ParameterType;
 import org.junit.Test;
 
 import static org.hamcrest.core.AllOf.allOf;

@@ -58,7 +58,7 @@ class IndexController(private val jsonSerializable: JsonSerializable,
 
         if (value.json.isNotBlank()) {
             try {
-                modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable, applicationContext).method(value.json!!).get())
+                modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable, applicationContext).method(value.json).get())
             } catch (ex: SesameJavaException) {
                 LOGGER.error("Can't call the method because of: ", ex)
                 modelAndView.addObject("errorMsg", ex.message)
