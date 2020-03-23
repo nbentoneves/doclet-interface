@@ -1,8 +1,9 @@
 package com.sesame.ui.domain
 
-open class Request{
+data class Request(val json: String = "") {
 
-    var json: String? = null
-    var counter: Int? = null
+    override fun toString(): String {
+        return "Request(json='$json')"
+    }
 
 }

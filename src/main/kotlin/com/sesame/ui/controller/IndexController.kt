@@ -56,7 +56,7 @@ class IndexController(private val jsonSerializable: JsonSerializable,
         modelAndView.addObject("paramObjects", docMethod.paramObjects)
         modelAndView.addObject("value", value)
 
-        if (value.json != null) {
+        if (value.json.isNotBlank()) {
             try {
                 modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable, applicationContext).method(value.json!!).get())
             } catch (ex: SesameJavaException) {

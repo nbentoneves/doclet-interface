@@ -50,6 +50,7 @@ class Invoker(private val metadata: DocMethod,
             }
 
         } catch (ex: Exception) {
+            //TODO: Change this message
             throw SesameJavaException("Can't execute the class/method, please check the configuration files or javadocs", ex)
         }
 

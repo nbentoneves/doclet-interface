@@ -11,10 +11,8 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.context.ApplicationContext
-import kotlin.reflect.KClass
 import kotlin.test.*
 
-//TODO: Create tests for other types
 @ExtendWith(MockKExtension::class)
 class InvokerTest {
 
@@ -47,76 +45,25 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method int parameters values`() {
+    fun `verify invoker when return success response from class with method boolean at parameters`() {
 
-        val parametersMapping: MutableMap<Int, Pair<Any, KClass<Any>>> = mutableMapOf()
-
-        parametersMapping[1] = Pair(20, ParameterType.INT.internalType.kotlin)
-        parametersMapping[2] = Pair(10, ParameterType.INT.internalType.kotlin)
-
-        every { metadata.packageName } returns TestClass::class.java.`package`.name
-        every { metadata.className } returns TestClass::class.java.simpleName
-        every { metadata.methodName } returns "method"
-        every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.INT), Pair(2, ParameterType.INT))
-        every { metadata.beanIdentification } returns "bean.identifier"
-
-        every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
-        every { jsonSerializable.serialize(any(), any(), arrayOf(20, 10)) } returns "30"
-
-        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
-
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
-
-        assertNotNull(result)
-        assertTrue { result.isPresent }
-        assertEquals("30", result.get())
-
-    }
-
-    @Test
-    fun `verify invoker when return success response from class with method Integer parameters values`() {
-
-        val parametersMapping: MutableMap<Int, Pair<Any, KClass<Any>>> = mutableMapOf()
-
-        parametersMapping[1] = Pair(20, ParameterType.INTEGER.internalType.kotlin)
-        parametersMapping[2] = Pair(10, ParameterType.INTEGER.internalType.kotlin)
+        val value: Boolean = true
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.BOOLEAN.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.BOOLEAN))
 
         every { metadata.packageName } returns TestClass::class.java.`package`.name
         every { metadata.className } returns TestClass::class.java.simpleName
         every { metadata.methodName } returns "method"
-        every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.INTEGER), Pair(2, ParameterType.INTEGER))
+        every { metadata.paramObjects } returns expectedParamObjects
         every { metadata.beanIdentification } returns "bean.identifier"
 
-        every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
-        every { jsonSerializable.serialize(any(), any(), arrayOf(20, 10)) } returns "30"
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.BOOLEAN.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
 
-        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
-
-        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
-
-        assertNotNull(result)
-        assertTrue { result.isPresent }
-        assertEquals("30", result.get())
-
-    }
-
-    @Test
-    fun `verify invoker when return success response from class with method String parameters values`() {
-
-        val parametersMapping: MutableMap<Int, Pair<Any, KClass<Any>>> = mutableMapOf()
-
-        parametersMapping[1] = Pair("Ola", ParameterType.STRING.internalType.kotlin)
-
-        every { metadata.packageName } returns TestClass::class.java.`package`.name
-        every { metadata.className } returns TestClass::class.java.simpleName
-        every { metadata.methodName } returns "method"
-        every { metadata.paramObjects } returns mapOf(Pair(1, ParameterType.STRING))
-        every { metadata.beanIdentification } returns "bean.identifier"
-
-        every { jsonDeserializable.deserialize(any(), any()) } returns parametersMapping
-        every { jsonSerializable.serialize(any(), any(), arrayOf("Ola")) } returns "true"
-
-        every { applicationContext.getBean(eq("bean.identifier")) } returns TestClass()
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "true"
 
         val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
 
@@ -125,4 +72,276 @@ class InvokerTest {
         assertEquals("true", result.get())
 
     }
+
+    @Test
+    fun `verify invoker when return success response from class with method char at parameters`() {
+
+        val value: Char = 'a'
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.CHAR.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.CHAR))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.CHAR.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "a"
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("a", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method byte at parameters`() {
+
+        val value: Byte = 1
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.BYTE.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.BYTE))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.BYTE.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "1"
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("1", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method short at parameters`() {
+
+        val value: Short = 10
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.SHORT.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.SHORT))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.SHORT.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "10"
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("10", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method int at parameters`() {
+
+        val value: Int = 10
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.INT.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.INT))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.INT.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "10"
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("10", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method long at parameters`() {
+
+        val value: Long = 1000
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.LONG.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.LONG))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.LONG.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "1000"
+
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("1000", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method float at parameters`() {
+
+        val value: Float = 20.5F
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.FLOAT.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.FLOAT))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.FLOAT.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "20.5"
+
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("20.5", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method double at parameters`() {
+
+        val value: Double = 200000000.5
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.FLOAT.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.FLOAT))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.FLOAT.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "200000000.5"
+
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("200000000.5", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method String at parameters`() {
+
+        val value: String = "Hello World"
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.STRING.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.STRING))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.STRING.internalType)
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "Hello World"
+
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("Hello World", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method int at parameters with more than one parameter`() {
+
+        val value1: Int = 10
+        val value2: Int = 20
+        val parametersMapping = mapOf(
+                Pair(1, Pair(value1, ParameterType.INT.internalType.kotlin)),
+                Pair(2, Pair(value2, ParameterType.INT.internalType.kotlin)))
+        val expectedParamObjects = mapOf(
+                Pair(1, ParameterType.INT),
+                Pair(2, ParameterType.INT))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns "bean.identifier"
+
+        val expectedMethod = TestClass::class.java.getMethod("method", *parametersMapping.map { it.value.second.java }.toTypedArray())
+        val expectedClass = TestClass()
+        val expectedParameters: Array<Any> = arrayOf(value1, value2)
+
+        every { applicationContext.getBean(eq("bean.identifier")) } returns expectedClass
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(eq(expectedClass), eq(expectedMethod), eq(expectedParameters)) } returns "30"
+
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue { result.isPresent }
+        assertEquals("30", result.get())
+
+    }
+
 }
