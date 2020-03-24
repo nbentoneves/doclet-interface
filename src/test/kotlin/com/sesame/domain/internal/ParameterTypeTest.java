@@ -1,6 +1,5 @@
-package com.sesame.internal;
+package com.sesame.domain.internal;
 
-import com.sesame.domain.internal.ParameterType;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import org.junit.Test;

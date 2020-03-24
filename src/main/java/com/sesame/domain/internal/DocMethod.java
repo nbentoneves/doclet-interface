@@ -70,7 +70,7 @@ public class DocMethod {
     @Override
     public String toString() {
         return new StringJoiner(", ", DocMethod.class.getSimpleName() + "[", "]")
-                .add("beanIdentification=" + beanIdentification)
+                .add("beanIdentification='" + beanIdentification + "'")
                 .add("packageName='" + packageName + "'")
                 .add("className='" + className + "'")
                 .add("methodName='" + methodName + "'")

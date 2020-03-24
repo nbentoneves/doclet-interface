@@ -6,6 +6,12 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 import org.springframework.context.ApplicationContext
 
+/**
+ * A post processor to inject the bean file configured. This allows load all the dependency beans
+ * for the user test.
+ *
+ * @author Nuno Bento <nbento.neves@gmail.com>
+ */
 class SesameBeanPostProcessorConfiguration(
         private val applicationContext: ApplicationContext) : BeanDefinitionRegistryPostProcessor {
 

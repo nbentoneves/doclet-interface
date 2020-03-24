@@ -15,7 +15,7 @@
 
     <name>sesame-java</name>
 
-    <description>Library to generate a html page to allow testing and document APIs</description>
+    <description>Library to generate a html page to allow testing libraries</description>
 
     <properties>
         <jacoco.classRatio>0.80</jacoco.classRatio>
@@ -59,12 +59,6 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io}</version>
-            </dependency>
-            <!-- TODO: Remove -->
-            <dependency>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-test-junit5</artifactId>
-                <version>${kotlin.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.mockk</groupId>
@@ -202,7 +196,6 @@
                         </goals>
                         <configuration>
                             <sourceDirs>
-                                <!--<sourceDir>${project.basedir}/src/test/java</sourceDir>-->
                                 <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
                             </sourceDirs>
                         </configuration>
@@ -278,9 +271,7 @@
                             <!-- FIXME: Please change to true value -->
                             <haltOnFailure>false</haltOnFailure>
                             <excludes>
-                                <exclude>com/docletinterface/testing/**/*.class</exclude>
-                                <exclude>com/docletinterface/ui/DocletInterfaceException.class</exclude>
-                                <exclude>com/docletinterface/ui/SesameJavaException.kt</exclude>
+                                <exclude>com/sesame/testing/**/*.class</exclude>
                             </excludes>
                             <rules>
                                 <rule>

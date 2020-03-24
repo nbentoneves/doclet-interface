@@ -1,7 +1,5 @@
-package com.sesame.internal;
+package com.sesame.domain.internal;
 
-import com.sesame.domain.internal.DocMethod;
-import com.sesame.domain.internal.ParameterType;
 import org.junit.Test;
 
 import static org.hamcrest.core.AllOf.allOf;
@@ -15,6 +13,7 @@ public class DocMethodTest {
     public void testToString() {
 
         DocMethod docMethod = new DocMethod.Builder()
+                .withBeanIdentification("id.beans")
                 .withPackageName("com.test.package")
                 .withClassName("Class")
                 .withMethodName("MethodName")
@@ -26,6 +25,7 @@ public class DocMethodTest {
                 .build();
 
         assertThat(docMethod.toString(), allOf(
+                containsString("beanIdentification='" +docMethod.getBeanIdentification()+ "'"),
                 containsString("packageName='" +docMethod.getPackageName()+ "'"),
                 containsString("className='" + docMethod.getClassName() + "'"),
                 containsString("methodName='" + docMethod.getMethodName() + "'"),
@@ -40,6 +40,7 @@ public class DocMethodTest {
     public void testGetDocMethod() {
 
         DocMethod docMethod = new DocMethod.Builder()
+                .withBeanIdentification("id.beans")
                 .withPackageName("com.test.package")
                 .withClassName("Class")
                 .withMethodName("MethodName")
@@ -53,6 +54,7 @@ public class DocMethodTest {
         assertEquals("MethodName", docMethod.getMethodName());
         assertEquals("This is a description", docMethod.getMethodDescription());
         assertEquals("ReturnType", docMethod.getReturnObject());
+        assertEquals("id.beans", docMethod.getBeanIdentification());
         assertEquals(ParameterType.INT, docMethod.getParamObjects().get(1));
         assertEquals(ParameterType.BOOLEAN, docMethod.getParamObjects().get(2));
 

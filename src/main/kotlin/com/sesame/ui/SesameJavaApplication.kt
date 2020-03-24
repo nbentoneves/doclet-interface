@@ -2,9 +2,12 @@ package com.sesame.ui
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.builder.SpringApplicationBuilder
-import org.springframework.boot.context.properties.ConfigurationProperties
 
-
+/**
+ * This is a main class of Sesame-Java
+ *
+ * @author Nuno Bento <nbento.neves@gmail.com>
+ */
 @SpringBootApplication(scanBasePackages = [
     "com.sesame.core",
     "com.sesame.ui"

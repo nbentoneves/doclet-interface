@@ -1,55 +1,81 @@
-package com.sesame.worker;
+package com.sesame.core.worker
 
-import com.sesame.core.worker.DocumentationWorker;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
+import com.sesame.domain.internal.DocMethod
+import com.sesame.worker.DocumentationFactory
+import io.mockk.MockKAnnotations.init
+import io.mockk.every
+import io.mockk.impl.annotations.MockK
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
+import java.util.*
 
-import java.util.Optional;
+class SwitchWorkerTest {
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+    private lateinit var victim: SwitchWorker
 
-public class GenerateDocumentationTest {
+    @MockK
+    private lateinit var textDocumentationWorker: DocumentationWorker
 
-    private GenerateDocumentation victim;
+    @MockK
+    private lateinit var yamlDocumentationWorker: YamlDocumentationWorkerImpl
 
-    @Mock
-    private DocumentationWorker textDocumentationWorker;
-
-    @Mock
-    private DocumentationFactory documentationFactory;
+    @MockK
+    private lateinit var documentationFactory: DocumentationFactory
 
     @Before
-    public void setupClass() {
-        initMocks(this);
+    fun setupClass() {
+        init(this)
+        victim = SwitchWorker(documentationFactory)
 
-        victim = new GenerateDocumentation(documentationFactory);
-        when(documentationFactory.getTextDocumentationWorker()).thenReturn(textDocumentationWorker);
+        every { documentationFactory.textDocumentationWorker } returns textDocumentationWorker
+        every { documentationFactory.yamlDocumentationWorker } returns yamlDocumentationWorker
     }
 
     @Test
-    public void testWhenConfigPathIsNullOrEmpty() {
-        assertFalse(victim.start("TEXT", null));
-        assertFalse(victim.start("TEXT", ""));
+    fun testWhenConfigPathIsNullOrEmpty() {
+
+        assertFalse(victim.start("TEXT", null).isPresent)
+        assertFalse(victim.start("TEXT", "").isPresent)
     }
 
     @Test
-    public void testWhenConfigTypeIsNullOrEmpty() {
-        assertFalse(victim.start(null, "PATH"));
-        assertFalse(victim.start("", "PATH"));
+    fun testWhenConfigTypeIsNullOrEmpty() {
+
+        assertFalse(victim.start(null, "PATH").isPresent)
+        assertFalse(victim.start("", "PATH").isPresent)
+
     }
 
     @Test
-    public void testWhenTextDocumentationWorkerReturnEmpty() {
+    fun testWhenConfigTypeNotExists() {
 
-        when(textDocumentationWorker.processInterfaceMethod(any())).thenReturn(Optional.empty());
+        assertFalse(victim.start("XPTO", javaClass.classLoader.getResource("config/yamlTemplate.yaml")!!.path).isPresent)
 
-        assertFalse(victim.start("TEXT", getClass().getClassLoader().getResource("config/config.txt").getPath()));
-        assertNull(victim.getDocMethod());
+    }
+
+    @Test
+    fun testWhenTextDocumentationWorkerReturnEmpty() {
+
+        every { textDocumentationWorker.processInterfaceMethod(any()) } returns Optional.empty()
+        assertFalse(victim.start("TEXT", javaClass.classLoader.getResource("config/config.txt")!!.path).isPresent)
+
+    }
+
+    @Test
+    fun testWhenYamlDocumentationWorkerReturnEmpty() {
+
+        every { yamlDocumentationWorker.processInterfaceMethod(any()) } returns Optional.empty()
+        assertFalse(victim.start("YAML", javaClass.classLoader.getResource("config/yamlTemplate.yaml")!!.path).isPresent)
+
+    }
+
+    @Test
+    fun testWhenWorkerReturnValidDocMethod() {
+
+        every { yamlDocumentationWorker.processInterfaceMethod(any()) } returns Optional.of(DocMethod.Builder().build())
+        assertTrue(victim.start("YAML", javaClass.classLoader.getResource("config/yamlTemplate.yaml")!!.path).isPresent)
 
     }
 

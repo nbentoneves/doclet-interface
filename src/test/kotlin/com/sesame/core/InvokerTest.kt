@@ -1,5 +1,6 @@
 package com.sesame.core
 
+import com.sesame.core.json.DeserializationException
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
 import com.sesame.core.test.TestClass
@@ -41,6 +42,14 @@ class InvokerTest {
 
         assertNotNull(result)
         assertFalse(result.isPresent)
+    }
+
+    @Test(expected = Exception::class)
+    fun `verify invoker when something throws an exception`() {
+        every { jsonDeserializable.deserialize(any(), any()) } throws DeserializationException("")
+        every { metadata.paramObjects } returns mapOf()
+
+        Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
     }
 
     @Test

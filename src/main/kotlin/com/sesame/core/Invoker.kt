@@ -8,6 +8,11 @@ import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
 import java.util.*
 
+/**
+ * This class contains the logic to invoke the class/method declared at config files.
+ *
+ * @author Nuno Bento <nbento.neves@gmail.com>
+ */
 class Invoker(private val metadata: DocMethod,
               private val jsonDeserializable: JsonDeserializable,
               private val jsonSerializable: JsonSerializable,
@@ -24,29 +29,23 @@ class Invoker(private val metadata: DocMethod,
             val parametersMapping = jsonDeserializable.deserialize(jsonData, metadata.paramObjects)
 
             if (parametersMapping.isNotEmpty()) {
-
                 val listOfParametersType = parametersMapping.map { it.value.second.java }.toTypedArray()
                 val listOfParametersValues = parametersMapping.map { it.value.first }.toTypedArray()
 
                 LOGGER.debug("List of parameters type... listOfParametersType={}", listOfParametersType)
                 LOGGER.debug("List of parameters values... listOfParametersValues={}", listOfParametersValues)
 
-                if (listOfParametersType.isNotEmpty() && listOfParametersValues.isNotEmpty()) {
+                val classInstance: Any = applicationContext.getBean(metadata.beanIdentification)
 
-                    val classInstance: Any = applicationContext.getBean(metadata.beanIdentification)
+                val method = classInstance::class.java.getMethod(metadata.methodName, *listOfParametersType)
 
-                    val method = classInstance::class.java.getMethod(metadata.methodName, *listOfParametersType)
+                LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
 
-                    LOGGER.info("Invoke method... classInstance={}, method={}", classInstance, method)
+                val result = jsonSerializable.serialize(classInstance, method, listOfParametersValues)
 
-                    val result = jsonSerializable.serialize(classInstance, method, listOfParametersValues)
+                LOGGER.info("Result serialized... result={}", result)
 
-                    LOGGER.info("Result serialized... result={}", result)
-
-                    return Optional.of(result)
-
-                }
-
+                return Optional.of(result)
             }
 
         } catch (ex: Exception) {

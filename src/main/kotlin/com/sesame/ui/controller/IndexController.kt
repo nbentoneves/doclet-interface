@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.servlet.ModelAndView
 
+/**
+ * Controller for the index page
+ *
+ * @author Nuno Bento <nbento.neves@gmail.com>
+ */
 @Controller
 class IndexController(private val jsonSerializable: JsonSerializable,
                       private val jsonDeserializable: JsonDeserializable,
