@@ -35,7 +35,8 @@ class Invoker(private val metadata: DocMethod,
                 LOGGER.debug("List of parameters type... listOfParametersType={}", listOfParametersType)
                 LOGGER.debug("List of parameters values... listOfParametersValues={}", listOfParametersValues)
 
-                val classInstance: Any = applicationContext.getBean(metadata.beanIdentification)
+                val classInstance: Any = if (metadata.beanIdentification == null)
+                    Class.forName(defineClassPath(metadata)).newInstance() else applicationContext.getBean(metadata.beanIdentification)
 
                 val method = classInstance::class.java.getMethod(metadata.methodName, *listOfParametersType)
 
@@ -56,5 +57,7 @@ class Invoker(private val metadata: DocMethod,
         return Optional.empty()
 
     }
+
+    private fun defineClassPath(metadata: DocMethod) = run { metadata.packageName + "." + metadata.className }
 
 }

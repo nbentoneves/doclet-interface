@@ -67,3 +67,7 @@ Unfortunately the project is not ready to have contributors but you can send sug
 like to see working. Maybe we can talk and you can work on it ;) 
 
 ### Notes
+
+
+java -Dconfig.file.path=config/config.txt -cp sesame-java-0.0.1-SNAPSHOT.jar:config:/Users/nunobento/.m2/repository/com/sesame/helper/sesame-java-test/1.0-SNAPSHOT/sesame-java-test-1.0-SNAPSHOT.jar -Dloader.main=com.sesame.ui.SesameJavaApplicationKt org.springframework.boot.loader.PropertiesLauncher
+java -Dconfig.file.path=config/config.txt -cp sesame-java-0.0.1-SNAPSHOT.jar:config:/Users/nunobento/.m2/repository/com/sesame/helper/sesame-java-test/1.0-SNAPSHOT/sesame-java-test-1.0-SNAPSHOT.jar org.springframework.boot.loader.PropertiesLauncher

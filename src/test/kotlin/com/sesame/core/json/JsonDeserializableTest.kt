@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Test
 import javax.naming.OperationNotSupportedException
 
-
+//TODO: Add new tests for all type of input values
 class JsonDeserializableTest {
 
     private lateinit var jsonDeserializable: JsonDeserializable

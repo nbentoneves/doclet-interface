@@ -1,12 +1,10 @@
 Test javadoc
 
 @doclib
-beanIdentification: sesame.java.test.service
-className: TestServiceClass
-packageName: com.sesame.testing
-methodName: calculator
-methodDescription: It's a service to calculate two numbers
-return: Int - the result of calculation
-param-1: Int - The first number - Simple description for the first parameter
-param-2: Int - The second number - Simple description for the second parameter
+className: CheckValue
+packageName: com.sesame.helper
+methodName: isValid
+methodDescription: Check if string is valid
+return: Boolean - the result of check
+param-1: String - The value
 @enddoclib
