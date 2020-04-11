@@ -1,0 +1,10 @@
+Test javadoc
+
+@doclib
+className: CheckValue
+packageName: com.sesame.helper
+methodName: isValid
+methodDescription: Check if string is valid
+return: Boolean - the result of check
+param-1: String - The value
+@enddoclib

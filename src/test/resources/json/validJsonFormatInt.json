@@ -1,0 +1,10 @@
+[
+  {
+    "isPrimitive": true,
+    "value": -2147483648
+  },
+  {
+    "isPrimitive": true,
+    "value": 2147483647
+  }
+]

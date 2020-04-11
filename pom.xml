@@ -9,13 +9,13 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.doclet-interface.helper</groupId>
+    <groupId>com.sesame.helper</groupId>
     <artifactId>sesame-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>sesame-java</name>
 
-    <description>Library to generate a html page to allow testing and document APIs</description>
+    <description>Library to generate a html page to allow testing libraries</description>
 
     <properties>
         <jacoco.classRatio>0.80</jacoco.classRatio>
@@ -26,17 +26,20 @@
         <jacoco.lineRatio>0.70</jacoco.lineRatio>
 
         <java.version>1.8</java.version>
-        <kotlin.version>1.2.71</kotlin.version>
+        <kotlin.version>1.3.61</kotlin.version>
 
         <ognl.version>3.1.12</ognl.version>
-        <sun.tools.version>1.5.0</sun.tools.version>
+        <commons-io>2.6</commons-io>
+        <gson.version>2.8.6</gson.version>
 
         <!-- Testing dependencies -->
         <junitparam.version>1.1.1</junitparam.version>
         <jacoco.version>0.8.4</jacoco.version>
         <coveralls.version>4.3.0</coveralls.version>
+        <mockk.version>1.9.3</mockk.version>
 
         <!-- General properties -->
+        <kotlin.compiler.incremental>false</kotlin.compiler.incremental>
         <coveralls-token/>
     </properties>
 
@@ -51,6 +54,21 @@
                 <groupId>pl.pragmatists</groupId>
                 <artifactId>JUnitParams</artifactId>
                 <version>${junitparam.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.mockk</groupId>
+                <artifactId>mockk</artifactId>
+                <version>${mockk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -68,7 +86,16 @@
             <groupId>ognl</groupId>
             <artifactId>ognl</artifactId>
         </dependency>
-        <!-- FIXME: Review this dependency -->
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <!--
+            FIXME: Review this dependency
+            Why we need this dependency to avoid:
+            WARN  o.s.h.c.j.Jackson2ObjectMapperBuilder For Jackson Kotlin classes support please add
+            "com.fasterxml.jackson.module:jackson-module-kotlin" to the classpath
+        -->
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
@@ -81,13 +108,13 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
-        <!-- FIXME: Why need the tool lib? Please check and verify this dependency -->
         <dependency>
-            <groupId>com.sun</groupId>
-            <artifactId>tools</artifactId>
-            <scope>system</scope>
-            <version>${java.version}</version>
-            <systemPath>${java.home}/../lib/tools.jar</systemPath>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
         <!-- Testing -->
@@ -109,6 +136,11 @@
         <dependency>
             <groupId>pl.pragmatists</groupId>
             <artifactId>JUnitParams</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.mockk</groupId>
+            <artifactId>mockk</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -134,12 +166,79 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>intellij-debug</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-loader</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.sesame.helper</groupId>
+                    <artifactId>sesame-java-test</artifactId>
+                    <version>1.0-SNAPSHOT</version>
+                </dependency>
+            </dependencies>
+        </profile>
     </profiles>
 
     <build>
 
+        <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
+
         <!-- Add plugin manager -->
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                            </sourceDirs>
+                            <args>
+                                <arg>-Xjsr305=warn</arg>
+                            </args>
+                            <compilerPlugins>
+                                <plugin>spring</plugin>
+                            </compilerPlugins>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                </executions>
+
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -173,52 +272,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.jetbrains.kotlin</groupId>
-                <artifactId>kotlin-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
-                            </sourceDirs>
-                            <args>
-                                <arg>-Xjsr305=warn</arg>
-                            </args>
-                            <compilerPlugins>
-                                <plugin>spring</plugin>
-                            </compilerPlugins>
-                        </configuration>
-                    </execution>
-
-                    <execution>
-                        <id>test-compile</id>
-                        <goals>
-                            <goal>test-compile</goal>
-                        </goals>
-                        <configuration>
-                            <sourceDirs>
-                                <sourceDir>${project.basedir}/src/test/kotlin</sourceDir>
-                                <sourceDir>${project.basedir}/src/test/java</sourceDir>
-                            </sourceDirs>
-                        </configuration>
-                    </execution>
-                </executions>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-maven-allopen</artifactId>
-                        <version>${kotlin.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
@@ -246,9 +299,7 @@
                             <!-- FIXME: Please change to true value -->
                             <haltOnFailure>false</haltOnFailure>
                             <excludes>
-                                <exclude>com/docletinterface/testing/**/*.class</exclude>
-                                <exclude>com/docletinterface/ui/DocletInterfaceException.class</exclude>
-                                <exclude>com/docletinterface/ui/DocletInterfaceException.kt</exclude>
+                                <exclude>com/sesame/testing/**/*.class</exclude>
                             </excludes>
                             <rules>
                                 <rule>
@@ -308,6 +359,28 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- https://docs.spring.io/spring-boot/docs/2.1.1.RELEASE/reference/htmlsingle/#howto-create-an-additional-executable-jar -->
+                    <classifier>exec</classifier>
+                </configuration>
             </plugin>
         </plugins>
     </build>
