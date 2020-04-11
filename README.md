@@ -1,5 +1,5 @@
 ### Status
-[![Coverage Status](https://coveralls.io/repos/github/nbentoneves/sesame-java/badge.svg?branch=master)](https://coveralls.io/github/nbentoneves/sesame-java?branch=FirstPhase)
+[![Coverage Status](https://coveralls.io/repos/github/nbentoneves/sesame-java/badge.svg?branch=master)](https://coveralls.io/github/nbentoneves/sesame-java?branch=master)
 [![Build Status](https://travis-ci.org/nbentoneves/sesame-java.svg?branch=master)](https://travis-ci.org/nbentoneves/sesame-java)
 
 ### Sesame Java
