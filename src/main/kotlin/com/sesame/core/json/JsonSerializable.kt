@@ -1,20 +1,22 @@
 package com.sesame.core.json
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.google.gson.GsonBuilder
 import java.lang.reflect.Method
 
 class JsonSerializable {
 
     companion object {
-        private val MAPPING = jacksonObjectMapper()
+        private val MAPPING = GsonBuilder()
+                .setPrettyPrinting()
+                .create()
     }
 
     fun serialize(classInstance: Any, method: Method, listOfParametersValues: Array<Any>): String = run {
         return try {
             val resultMethod = method.invoke(classInstance, *listOfParametersValues)
-            MAPPING.writerWithDefaultPrettyPrinter().writeValueAsString(resultMethod)
+            MAPPING.toJson(resultMethod)
         } catch (ex: Exception) {
-            MAPPING.writerWithDefaultPrettyPrinter().writeValueAsString(ex)
+            MAPPING.toJson(ex)
         }
     }
 
