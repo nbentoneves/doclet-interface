@@ -1,8 +1,8 @@
 package com.sesame.core
 
+import com.sesame.core.domain.MethodInfo
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
-import com.sesame.domain.internal.DocMethod
 import com.sesame.ui.SesameJavaException
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContext
@@ -13,7 +13,7 @@ import java.util.*
  *
  * @author Nuno Bento <nbento.neves@gmail.com>
  */
-class Invoker(private val metadata: DocMethod,
+class Invoker(private val metadata: MethodInfo,
               private val jsonDeserializable: JsonDeserializable,
               private val jsonSerializable: JsonSerializable,
               private val applicationContext: ApplicationContext) {
@@ -58,6 +58,6 @@ class Invoker(private val metadata: DocMethod,
 
     }
 
-    private fun defineClassPath(metadata: DocMethod) = run { metadata.packageName + "." + metadata.className }
+    private fun defineClassPath(metadata: MethodInfo) = run { metadata.packageName + "." + metadata.className }
 
 }

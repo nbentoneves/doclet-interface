@@ -1,6 +1,6 @@
 package com.sesame.core.json
 
-import com.sesame.domain.internal.ParameterType
+import com.sesame.core.domain.ParameterType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before

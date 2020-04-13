@@ -4,8 +4,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.google.gson.stream.MalformedJsonException
+import com.sesame.core.domain.ParameterType
 import com.sesame.core.json.domain.AttrDomain
-import com.sesame.domain.internal.ParameterType
 import org.slf4j.LoggerFactory
 import kotlin.reflect.KClass
 
@@ -22,12 +22,12 @@ class JsonDeserializable {
         return GSON.fromJson(json, object : TypeToken<T>() {}.type)
     }
 
-    fun deserialize(jsonData: String, parametersToMap: Map<Int, ParameterType>): Map<Int, Pair<Any, KClass<Any>>> {
+    fun deserialize(jsonData: String, parametersToMap: Map<Int, ParameterType>): Map<Int, Pair<Any, KClass<*>>> {
 
         check(parametersToMap.isNotEmpty()) { "parametersToMap can not be null or empty" }
         check(jsonData.isNotBlank()) { "jsonData can not be null or empty" }
 
-        val parameterList = mutableMapOf<Int, Pair<Any, KClass<Any>>>()
+        val parameterList = mutableMapOf<Int, Pair<Any, KClass<*>>>()
 
         try {
             val jsonDomain: List<AttrDomain> = GSON.fromJson(jsonData, object : TypeToken<List<AttrDomain>>() {}.type)
