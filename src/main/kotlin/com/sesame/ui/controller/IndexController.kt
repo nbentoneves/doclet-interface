@@ -1,9 +1,9 @@
 package com.sesame.ui.controller
 
 import com.sesame.core.Invoker
+import com.sesame.core.domain.MethodInfo
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
-import com.sesame.domain.internal.DocMethod
 import com.sesame.ui.SesameJavaException
 import com.sesame.ui.domain.Request
 import org.slf4j.LoggerFactory
@@ -29,19 +29,19 @@ class IndexController(private val jsonSerializable: JsonSerializable,
     }
 
     @Autowired
-    lateinit var docMethod: DocMethod
+    lateinit var methodInfo: MethodInfo
 
     @RequestMapping("/")
     fun index(value: Request): ModelAndView {
 
         val modelAndView = ModelAndView()
         modelAndView.viewName = "index"
-        modelAndView.addObject("packageName", docMethod.packageName)
-        modelAndView.addObject("className", docMethod.className)
-        modelAndView.addObject("methodName", docMethod.methodName)
-        modelAndView.addObject("methodDescription", docMethod.methodDescription)
-        modelAndView.addObject("returnObject", docMethod.returnObject)
-        modelAndView.addObject("paramObjects", docMethod.paramObjects)
+        modelAndView.addObject("packageName", methodInfo.packageName)
+        modelAndView.addObject("className", methodInfo.className)
+        modelAndView.addObject("methodName", methodInfo.methodName)
+        modelAndView.addObject("methodDescription", methodInfo.methodDescription)
+        modelAndView.addObject("returnObject", methodInfo.returnObject)
+        modelAndView.addObject("paramObjects", methodInfo.paramObjects)
         modelAndView.addObject("errorMsg", "")
         modelAndView.addObject("value", value)
 
@@ -53,17 +53,17 @@ class IndexController(private val jsonSerializable: JsonSerializable,
 
         val modelAndView = ModelAndView()
         modelAndView.viewName = "index"
-        modelAndView.addObject("packageName", docMethod.packageName)
-        modelAndView.addObject("className", docMethod.className)
-        modelAndView.addObject("methodName", docMethod.methodName)
-        modelAndView.addObject("methodDescription", docMethod.methodDescription)
-        modelAndView.addObject("returnObject", docMethod.returnObject)
-        modelAndView.addObject("paramObjects", docMethod.paramObjects)
+        modelAndView.addObject("packageName", methodInfo.packageName)
+        modelAndView.addObject("className", methodInfo.className)
+        modelAndView.addObject("methodName", methodInfo.methodName)
+        modelAndView.addObject("methodDescription", methodInfo.methodDescription)
+        modelAndView.addObject("returnObject", methodInfo.returnObject)
+        modelAndView.addObject("paramObjects", methodInfo.paramObjects)
         modelAndView.addObject("value", value)
 
         if (value.json.isNotBlank()) {
             try {
-                modelAndView.addObject("result", Invoker(docMethod, jsonDeserializable, jsonSerializable, applicationContext).method(value.json).get())
+                modelAndView.addObject("result", Invoker(methodInfo, jsonDeserializable, jsonSerializable, applicationContext).method(value.json).get())
             } catch (ex: SesameJavaException) {
                 LOGGER.error("Can't call the method because of: ", ex)
                 modelAndView.addObject("errorMsg", ex.message)

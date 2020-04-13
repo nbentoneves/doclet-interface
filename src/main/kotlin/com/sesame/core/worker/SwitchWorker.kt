@@ -1,7 +1,6 @@
 package com.sesame.core.worker
 
-import com.sesame.domain.internal.DocMethod
-import com.sesame.worker.DocumentationFactory
+import com.sesame.core.domain.MethodInfo
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import java.io.File
@@ -14,7 +13,7 @@ class SwitchWorker(private val documentationFactory: DocumentationFactory) {
         private val LOGGER = LoggerFactory.getLogger(SwitchWorker::class.java)
     }
 
-    fun start(configType: String?, configPath: String?): Optional<DocMethod> {
+    fun start(configType: String?, configPath: String?): Optional<MethodInfo> {
 
         if (configPath == null || configPath.isEmpty() || configType == null || configType.isEmpty()) {
             LOGGER.error("Can't process any source. Please check the property inserted.")
@@ -22,19 +21,19 @@ class SwitchWorker(private val documentationFactory: DocumentationFactory) {
         }
 
         val worker: DocumentationWorker = when (configType) {
-            "TEXT" -> documentationFactory.textDocumentationWorker
-            "YAML" -> documentationFactory.yamlDocumentationWorker
+            "TEXT" -> documentationFactory.getTextDocumentationWorker()
+            "YAML" -> documentationFactory.getYamlDocumentationWorker()
             else -> {
                 LOGGER.info("msg='Can not support this type of configuration', configType='{}'", configType)
                 return Optional.empty()
             }
         }
 
-        val docMethod = worker.processInterfaceMethod(File(configPath))
+        val methodInfo = worker.processInterfaceMethod(File(configPath))
 
-        if (docMethod.isPresent) {
-            LOGGER.info("{}", docMethod)
-            return docMethod
+        if (methodInfo.isPresent) {
+            LOGGER.info("{}", methodInfo)
+            return methodInfo
         }
 
         return Optional.empty()

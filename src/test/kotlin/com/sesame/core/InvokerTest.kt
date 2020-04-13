@@ -1,11 +1,11 @@
 package com.sesame.core
 
+import com.sesame.core.domain.MethodInfo
+import com.sesame.core.domain.ParameterType
 import com.sesame.core.json.DeserializationException
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
 import com.sesame.core.test.TestClass
-import com.sesame.domain.internal.DocMethod
-import com.sesame.domain.internal.ParameterType
 import io.mockk.MockKAnnotations.init
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContext
 class InvokerTest {
 
     @MockK
-    private lateinit var metadata: DocMethod
+    private lateinit var metadata: MethodInfo
 
     @MockK
     private lateinit var jsonDeserializable: JsonDeserializable

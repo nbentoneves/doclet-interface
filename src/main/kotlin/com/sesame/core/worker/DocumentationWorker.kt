@@ -1,6 +1,6 @@
 package com.sesame.core.worker
 
-import com.sesame.domain.internal.DocMethod
+import com.sesame.core.domain.MethodInfo
 import java.io.File
 import java.util.*
 
@@ -11,6 +11,6 @@ import java.util.*
  */
 interface DocumentationWorker {
 
-    fun processInterfaceMethod(file: File): Optional<DocMethod>
+    fun processInterfaceMethod(file: File): Optional<MethodInfo>
 
 }
