@@ -56,7 +56,7 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
                 return Optional.empty()
             }
 
-            val docLines = filterDocumentation.get().split("\n".toRegex()).toTypedArray()
+            val docLines = filterDocumentation.get().split("\n".toRegex())
 
             val methodInfo = MethodInfo.Builder()
 
@@ -65,35 +65,35 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
                 try {
                     when (getTag(line)) {
                         Tag.BEAN_IDENTIFICATION_NAME -> {
-                            val beanIdentification = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val beanIdentification = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             methodInfo.withBeanIdentification(beanIdentification)
                         }
 
                         Tag.PACKAGE_NAME -> {
-                            val packageName = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val packageName = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             methodInfo.withPackageName(packageName)
                         }
 
                         Tag.CLASS_NAME -> {
-                            val className = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val className = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             methodInfo.withClassName(className)
                         }
 
                         Tag.METHOD_NAME -> {
-                            val methodName = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val methodName = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             methodInfo.withMethodName(methodName)
                         }
 
                         Tag.METHOD_DESCRIPTION -> {
-                            val methodDescrip = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val methodDescrip = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             methodInfo.withMethodDescription(methodDescrip)
                         }
 
                         Tag.RETURN -> {
-                            val returnDocumentation = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
+                            val returnDocumentation = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
                             try {
-                                val returnDescription = returnDocumentation.split(DELIMITATOR_DASH.toRegex()).toTypedArray()[1].trim()
-                                val returnType = returnDocumentation.split(DELIMITATOR_DASH.toRegex()).toTypedArray()[0].trim()
+                                val returnDescription = returnDocumentation.split(DELIMITATOR_DASH.toRegex())[1].trim()
+                                val returnType = returnDocumentation.split(DELIMITATOR_DASH.toRegex())[0].trim()
                                 methodInfo.withReturnObject(returnType)
                                 methodInfo.withReturnObjectDescription(returnDescription)
                             } catch (ex: PatternSyntaxException) {
@@ -103,11 +103,11 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
                         }
 
                         Tag.PARAM -> {
-                            val paramDocumentation = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[1].trim()
-                            val paramIndex = line.split(DELIMITATOR_COLON.toRegex()).toTypedArray()[0].split(DELIMITATOR_DASH.toRegex()).toTypedArray()[1].toInt()
+                            val paramDocumentation = line.split(DELIMITATOR_COLON.toRegex())[1].trim()
+                            val paramIndex = line.split(DELIMITATOR_COLON.toRegex())[0].split(DELIMITATOR_DASH.toRegex())[1].toInt()
                             try {
-                                val paramDescription = paramDocumentation.split(DELIMITATOR_DASH.toRegex()).toTypedArray()[1].trim()
-                                val paramType = paramDocumentation.split(DELIMITATOR_DASH.toRegex()).toTypedArray()[0].trim()
+                                val paramDescription = paramDocumentation.split(DELIMITATOR_DASH.toRegex())[1].trim()
+                                val paramType = paramDocumentation.split(DELIMITATOR_DASH.toRegex())[0].trim()
                                 methodInfo.addParamObjects(paramIndex, ParameterType.getInternalType(paramType))
                             } catch (ex: PatternSyntaxException) {
                                 LOGGER.warn("msg='Can not extract the param detail, check the format of documentation', param={}", paramDocumentation, ex)
