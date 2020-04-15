@@ -1,7 +1,6 @@
 package com.sesame.core.worker
 
-import com.sesame.domain.internal.DocMethod
-import com.sesame.worker.DocumentationFactory
+import com.sesame.core.domain.MethodInfo
 import io.mockk.MockKAnnotations.init
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -29,8 +28,8 @@ class SwitchWorkerTest {
         init(this)
         victim = SwitchWorker(documentationFactory)
 
-        every { documentationFactory.textDocumentationWorker } returns textDocumentationWorker
-        every { documentationFactory.yamlDocumentationWorker } returns yamlDocumentationWorker
+        every { documentationFactory.getTextDocumentationWorker() } returns textDocumentationWorker
+        every { documentationFactory.getYamlDocumentationWorker() } returns yamlDocumentationWorker
     }
 
     @Test
@@ -74,7 +73,7 @@ class SwitchWorkerTest {
     @Test
     fun testWhenWorkerReturnValidDocMethod() {
 
-        every { yamlDocumentationWorker.processInterfaceMethod(any()) } returns Optional.of(DocMethod.Builder().build())
+        every { yamlDocumentationWorker.processInterfaceMethod(any()) } returns Optional.of(MethodInfo.Builder().build())
         assertTrue(victim.start("YAML", javaClass.classLoader.getResource("config/yamlTemplate.yaml")!!.path).isPresent)
 
     }

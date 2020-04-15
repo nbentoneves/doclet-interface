@@ -1,11 +1,11 @@
 package com.sesame.core
 
+import com.sesame.core.domain.MethodInfo
+import com.sesame.core.domain.ParameterType
 import com.sesame.core.json.DeserializationException
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
 import com.sesame.core.test.TestClass
-import com.sesame.domain.internal.DocMethod
-import com.sesame.domain.internal.ParameterType
 import io.mockk.MockKAnnotations.init
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -17,7 +17,7 @@ import org.springframework.context.ApplicationContext
 class InvokerTest {
 
     @MockK
-    private lateinit var metadata: DocMethod
+    private lateinit var metadata: MethodInfo
 
     @MockK
     private lateinit var jsonDeserializable: JsonDeserializable
@@ -53,7 +53,34 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method boolean at parameters`() {
+    fun `verify invoker when return success response from class with method boolean at parameters using reflection`() {
+
+        val value: Boolean = true
+        val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.BOOLEAN.internalType.kotlin)))
+        val expectedParamObjects = mapOf(Pair(1, ParameterType.BOOLEAN))
+
+        every { metadata.packageName } returns TestClass::class.java.`package`.name
+        every { metadata.className } returns TestClass::class.java.simpleName
+        every { metadata.methodName } returns "method"
+        every { metadata.paramObjects } returns expectedParamObjects
+        every { metadata.beanIdentification } returns null
+
+        val expectedMethod = TestClass::class.java.getMethod("method", ParameterType.BOOLEAN.internalType)
+        val expectedParameters: Array<Any> = arrayOf(value)
+
+        every { jsonDeserializable.deserialize(eq("JSON_DATA"), eq(expectedParamObjects)) } returns parametersMapping
+        every { jsonSerializable.serialize(any(), eq(expectedMethod), eq(expectedParameters)) } returns "true"
+
+        val result = Invoker(metadata, jsonDeserializable, jsonSerializable, applicationContext).method("JSON_DATA")
+
+        assertNotNull(result)
+        assertTrue(result.isPresent)
+        assertEquals("true", result.get())
+
+    }
+
+    @Test
+    fun `verify invoker when return success response from class with method boolean at parameters using dependency injection`() {
 
         val value: Boolean = true
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.BOOLEAN.internalType.kotlin)))
@@ -82,9 +109,9 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method char at parameters`() {
+    fun `verify invoker when return success response from class with method char at parameters using dependency injection`() {
 
-        val value: Char = 'a'
+        val value = 'a'
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.CHAR.internalType.kotlin)))
         val expectedParamObjects = mapOf(Pair(1, ParameterType.CHAR))
 
@@ -111,7 +138,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method byte at parameters`() {
+    fun `verify invoker when return success response from class with method byte at parameters using dependency injections`() {
 
         val value: Byte = 1
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.BYTE.internalType.kotlin)))
@@ -140,7 +167,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method short at parameters`() {
+    fun `verify invoker when return success response from class with method short at parameters using dependency injection`() {
 
         val value: Short = 10
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.SHORT.internalType.kotlin)))
@@ -169,7 +196,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method int at parameters`() {
+    fun `verify invoker when return success response from class with method int at parameters using dependency injection`() {
 
         val value: Int = 10
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.INT.internalType.kotlin)))
@@ -198,7 +225,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method long at parameters`() {
+    fun `verify invoker when return success response from class with method long at parameters using dependency injection`() {
 
         val value: Long = 1000
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.LONG.internalType.kotlin)))
@@ -228,7 +255,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method float at parameters`() {
+    fun `verify invoker when return success response from class with method float at parameters using dependency injection`() {
 
         val value: Float = 20.5F
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.FLOAT.internalType.kotlin)))
@@ -258,7 +285,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method double at parameters`() {
+    fun `verify invoker when return success response from class with method double at parameters using dependency injection`() {
 
         val value: Double = 200000000.5
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.FLOAT.internalType.kotlin)))
@@ -288,7 +315,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method String at parameters`() {
+    fun `verify invoker when return success response from class with method String at parameters using dependency injection`() {
 
         val value: String = "Hello World"
         val parametersMapping = mapOf(Pair(1, Pair(value, ParameterType.STRING.internalType.kotlin)))
@@ -318,7 +345,7 @@ class InvokerTest {
     }
 
     @Test
-    fun `verify invoker when return success response from class with method int at parameters with more than one parameter`() {
+    fun `verify invoker when return success response from class with method int at parameters with more than one parameter using dependency injection`() {
 
         val value1: Int = 10
         val value2: Int = 20
