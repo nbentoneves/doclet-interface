@@ -14,14 +14,14 @@ class MethodInfo private constructor(
 
 
     data class Builder(
-            var beanIdentification: String? = null,
-            var packageName: String? = null,
-            var className: String? = null,
-            var methodName: String? = null,
-            var methodDescription: String? = null,
-            var returnObject: String? = null,
-            var returnObjectDescription: String? = null,
-            val paramObjects: MutableMap<Int, ParameterType> = mutableMapOf()) {
+            private var beanIdentification: String? = null,
+            private var packageName: String? = null,
+            private var className: String? = null,
+            private var methodName: String? = null,
+            private var methodDescription: String? = null,
+            private var returnObject: String? = null,
+            private var returnObjectDescription: String? = null,
+            private val paramObjects: MutableMap<Int, ParameterType> = mutableMapOf()) {
 
         fun withBeanIdentification(beanIdentification: String) = apply { this.beanIdentification = beanIdentification }
         fun withPackageName(packageName: String) = apply { this.packageName = packageName }
