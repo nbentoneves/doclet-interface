@@ -43,11 +43,11 @@ class JsonDeserializable {
 
                     if (jsonAttr.isPrimitive) {
 
-                        LOGGER.debug("Extract primitive value...")
+                        LOGGER.debug("message='Extracting primitive value...'")
 
                         val valueWithType = mappingParameters(jsonAttr, entry.value)
 
-                        LOGGER.debug("Add new mapping value... valueType={}, value={}", entry.value.internalType, jsonAttr.value)
+                        LOGGER.info("message='Add new mapping value' valueType='{}', value='{}'", entry.value.internalType, jsonAttr.value)
                         parameterList[entry.key] = Pair(valueWithType, entry.value.internalType.kotlin)
 
                     } else {
@@ -58,11 +58,11 @@ class JsonDeserializable {
             }
 
         } catch (ex: MalformedJsonException) {
-            LOGGER.error("msg=Invalid json', jsonData='{}'", jsonData)
+            LOGGER.error("message='Invalid json', jsonData='{}'", jsonData)
         } catch (ex: JsonSyntaxException) {
-            LOGGER.error("msg=Invalid json', jsonData='{}'", jsonData)
+            LOGGER.error("message='Invalid json', jsonData='{}'", jsonData)
         } catch (ex: IndexOutOfBoundsException) {
-            LOGGER.error("msg='The parameters mapping missing some information', parametersToMap='{}'", parametersToMap)
+            LOGGER.error("message='The parameters mapping missing some information', parametersToMap='{}'", parametersToMap)
         }
 
         return parameterList

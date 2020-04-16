@@ -97,7 +97,7 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
                                 methodInfo.withReturnObject(returnType)
                                 methodInfo.withReturnObjectDescription(returnDescription)
                             } catch (ex: PatternSyntaxException) {
-                                LOGGER.warn("msg='Can not extract the value detail, check the format of documentation', return={}", returnDocumentation, ex)
+                                LOGGER.warn("message='Can not extract the value detail, check the format of documentation', return='{}'", returnDocumentation, ex)
                                 methodInfo.withReturnObject(returnDocumentation)
                             }
                         }
@@ -110,14 +110,14 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
                                 val paramType = paramDocumentation.split(DELIMITATOR_DASH.toRegex())[0].trim()
                                 methodInfo.addParamObjects(paramIndex, ParameterType.getInternalType(paramType))
                             } catch (ex: PatternSyntaxException) {
-                                LOGGER.warn("msg='Can not extract the param detail, check the format of documentation', param={}", paramDocumentation, ex)
+                                LOGGER.warn("message='Can not extract the param detail, check the format of documentation', param='{}'", paramDocumentation, ex)
                             }
                         }
                         else -> {
                         }
                     }
                 } catch (ex: Exception) {
-                    LOGGER.error("msg='Can not extract the value, check the format of documentation', docLine={}", docLine, ex)
+                    LOGGER.error("message='Can not extract the value, check the format of documentation', docLine='{}'", docLine, ex)
                     throw RuntimeException("Error when try to extract the values from line")
                 }
             }
@@ -125,7 +125,7 @@ class TextDocumentationWorkerImpl : DocumentationWorker {
             return Optional.of(methodInfo.build())
 
         } catch (ex: IOException) {
-            LOGGER.error("msg='Can not extract the value from config variable.'", ex)
+            LOGGER.error("message='Can not extract the value from config variable.'", ex)
             throw RuntimeException("Error when try to extract the values from line")
         }
 

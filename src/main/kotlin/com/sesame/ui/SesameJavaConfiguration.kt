@@ -27,7 +27,7 @@ open class SesameJavaConfiguration {
     @Bean(name = ["methodInfo"])
     open fun getDocMethod(switchWorker: SwitchWorker): MethodInfo {
 
-        LOGGER.info("Path of source config file: {}", property)
+        LOGGER.info("message='Path of source config file', configFilePath='{}'", property)
 
         val result = switchWorker.start(configType, property)
 

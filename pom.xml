@@ -9,13 +9,27 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.sesame.helper</groupId>
+    <groupId>com.github</groupId>
     <artifactId>sesame-java</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <name>sesame-java</name>
-
+    <url>https://github.com/nbentoneves/sesame-java</url>
+    <inceptionYear>2020</inceptionYear>
     <description>Library to generate a html page to allow testing libraries</description>
+
+    <developers>
+        <developer>
+            <name>Nuno Bento</name>
+            <email>nbento.neves@gmail.com</email>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>git@github.com:nbentoneves/sesame-java.git</url>
+        <connection>scm:git:git@github.com:nbentoneves/sesame-java.git</connection>
+        <developerConnection>scm:git:git@github.com:nbentoneves/sesame-java.git</developerConnection>
+    </scm>
 
     <properties>
         <jacoco.classRatio>0.80</jacoco.classRatio>

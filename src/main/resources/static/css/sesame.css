@@ -1,0 +1,13 @@
+/*!
+ * Sesame CSS
+ */
+textarea.form-control.requestTextArea {
+    height: 350px;
+    resize: none;
+}
+
+textarea.form-control.responseTextArea {
+    height: 300px;
+    resize: none;
+}
+

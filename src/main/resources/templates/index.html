@@ -14,6 +14,7 @@
 
     <!-- Custom styles for this template -->
     <link href="css/scrolling-nav.css" rel="stylesheet">
+    <link href="css/sesame.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -27,10 +28,10 @@
 <section id="about">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-6 mx-auto">
                 <h2>Make magic 🎩</h2>
                 <br/>
-                <div class="accordion" id="accordionExample">
+                <div class="accordion">
                     <div class="card">
                         <div class="card-header">
                             <h4 class="mb-0">Library Info <span class="btn btn-link" type="button"
@@ -39,8 +40,7 @@
                                                                 aria-controls="collapseOne">⬆️</span></h4>
                         </div>
 
-                        <div id="collapseInfo" class="collapse show" aria-labelledby="headingOne"
-                             data-parent="#accordionExample">
+                        <div id="collapseInfo" class="collapse show" aria-labelledby="headingOne">
                             <div class="card-body">
                                 <table class="table table-bordered">
                                     <tbody>
@@ -79,56 +79,73 @@
                     </div>
 
                     <div class="card">
-                        <div class="card-header" id="headingTwo">
+                        <div class="card-header">
+                            <h4 class="mb-0">Testing</h4>
+                        </div>
+                        <div class="card-body">
+                            <label>Request Json:</label>
+                            <div class="alert alert-info" role="alert">
+                                <p>You should insert the parameters using json, please insert a parameter per
+                                    json value</p>
+                                <p>E.g:</p>
+                                <pre class="pre-scrollable">
+                                        <code>
+[
+    {
+        "isPrimitive": true,
+        "value": "2"
+    },
+    {
+        "isPrimitive": true,
+        "value": "3"
+    }
+]
+                                        </code>
+                                    </pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mx-auto" style="margin-top: 70px;">
+                <div class="accordion">
+                    <div class="card">
+                        <div class="card-header">
                             <h4 class="mb-0">Testing</h4>
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Request Json:</label>
-                                <div class="alert alert-info" role="alert">
-                                    <p>You should insert the parameters using json, please insert a parameter per
-                                        json value</p>
-                                    <p>E.g:</p>
-                                    <pre class="pre-scrollable">
-                                        <code>
-    [
-        {
-            "isPrimitive": true,
-            "value": "2"
-        },
-        {
-            "isPrimitive": true,
-            "value": "3"
-        }
-    ]
-                                        </code>
-                                    </pre>
-                                </div>
                                 <form action="#" th:action="@{/submit}" th:object="${value}" th:method="post">
-                                    <textarea th:field="*{json}" class="form-control" id="exampleFormControlTextarea1"
+                                    <textarea th:field="*{json}" class="form-control requestTextArea" id="formRequest"
                                               rows="3"></textarea>
                                     <br/>
                                     <button type="submit" class="btn btn-primary btn-lg btn-block">Submit Request
                                     </button>
                                     <br/>
                                 </form>
-                                <div class="alert alert-danger" role="alert"><span th:text="*{errorMsg}"></span></div>
                             </div>
                         </div>
-
                     </div>
 
                     <div class="card">
-                        <div class="card-header" id="headingThree">
+                        <div class="card-header">
                             <h4 class="mb-0">Result</h4>
                         </div>
                         <div class="card-body">
-                            <textarea th:text="*{result}" class="form-control" id="resultTextArea" rows="3"
+                            <textarea th:text="*{result}" class="form-control responseTextArea" id="resultTextArea"
+                                      rows="3"
                                       contenteditable="false"></textarea>
                             <br/>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-12 mx-auto">
+                <div class="alert alert-danger" role="alert"><span th:text="*{errorMessage}"></span></div>
             </div>
         </div>
     </div>

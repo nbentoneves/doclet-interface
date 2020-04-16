@@ -16,7 +16,7 @@ class SwitchWorker(private val documentationFactory: DocumentationFactory) {
     fun start(configType: String?, configPath: String?): Optional<MethodInfo> {
 
         if (configPath == null || configPath.isEmpty() || configType == null || configType.isEmpty()) {
-            LOGGER.error("Can't process any source. Please check the property inserted.")
+            LOGGER.error("message='Can not process any source. Please check the property inserted.'")
             return Optional.empty()
         }
 
@@ -24,7 +24,7 @@ class SwitchWorker(private val documentationFactory: DocumentationFactory) {
             "TEXT" -> documentationFactory.getTextDocumentationWorker()
             "YAML" -> documentationFactory.getYamlDocumentationWorker()
             else -> {
-                LOGGER.info("msg='Can not support this type of configuration', configType='{}'", configType)
+                LOGGER.info("message='Can not support this type of configuration', configType='{}'", configType)
                 return Optional.empty()
             }
         }
@@ -32,7 +32,7 @@ class SwitchWorker(private val documentationFactory: DocumentationFactory) {
         val methodInfo = worker.processInterfaceMethod(File(configPath))
 
         if (methodInfo.isPresent) {
-            LOGGER.info("{}", methodInfo)
+            LOGGER.info("message='Get method info', methodInfo='{}'", methodInfo)
             return methodInfo
         }
 

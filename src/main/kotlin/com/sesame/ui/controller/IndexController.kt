@@ -4,7 +4,6 @@ import com.sesame.core.Invoker
 import com.sesame.core.domain.MethodInfo
 import com.sesame.core.json.JsonDeserializable
 import com.sesame.core.json.JsonSerializable
-import com.sesame.ui.SesameJavaException
 import com.sesame.ui.domain.Request
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -42,7 +41,7 @@ class IndexController(private val jsonSerializable: JsonSerializable,
         modelAndView.addObject("methodDescription", methodInfo.methodDescription)
         modelAndView.addObject("returnObject", methodInfo.returnObject)
         modelAndView.addObject("paramObjects", methodInfo.paramObjects)
-        modelAndView.addObject("errorMsg", "")
+        modelAndView.addObject("errorMessage", "")
         modelAndView.addObject("value", value)
 
         return modelAndView
@@ -64,12 +63,13 @@ class IndexController(private val jsonSerializable: JsonSerializable,
         if (value.json.isNotBlank()) {
             try {
                 modelAndView.addObject("result", Invoker(methodInfo, jsonDeserializable, jsonSerializable, applicationContext).method(value.json).get())
-            } catch (ex: SesameJavaException) {
-                LOGGER.error("Can't call the method because of: ", ex)
-                modelAndView.addObject("errorMsg", ex.message)
+            } catch (ex: Exception) {
+                LOGGER.error("message='Something unexpected happened'", ex)
+                modelAndView.addObject("errorMessage", "Can't execute the class/method, please check the logging system")
             }
         }
 
         return modelAndView
     }
+
 }
